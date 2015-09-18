@@ -1,11 +1,14 @@
 {
   "name": "ipapi",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Web Server that provides a simple API for IP address information",
   "main": "index.js",
   "public": true,
   "publishConfig": {
     "registry": "http://registry.npmjs.org/"
+  },
+  "engines": {
+    "node" : ">=0.10.0 <0.13"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -27,10 +30,10 @@
   },
   "homepage": "https://github.com/guyellis/ipapi",
   "dependencies": {
-    "async": "^1.4.2",
-    "express": "^4.13.3",
+    "async": "1.4.2",
+    "express": "4.13.3",
     "mmdb-reader": "0.0.4",
-    "request": "^2.62.0",
-    "validator": "^4.0.6"
+    "request": "2.62.0",
+    "validator": "4.0.6"
   }
 }
