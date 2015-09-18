@@ -1,0 +1,32 @@
+{
+  "name": "ipapi",
+  "version": "0.0.1",
+  "description": "Web Server that provides a simple API for IP address information",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/guyellis/ipapi.git"
+  },
+  "keywords": [
+    "ip",
+    "address",
+    "lookup",
+    "api"
+  ],
+  "author": "Guy Ellis <wildfiction@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/guyellis/ipapi/issues"
+  },
+  "homepage": "https://github.com/guyellis/ipapi",
+  "dependencies": {
+    "async": "^1.4.2",
+    "express": "^4.13.3",
+    "mmdb-reader": "0.0.4",
+    "request": "^2.62.0",
+    "validator": "^4.0.6"
+  }
+}
