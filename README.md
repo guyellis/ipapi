@@ -86,3 +86,7 @@ For example, if you're running the server locally then opening `http://localhost
 * Ubuntu 14.04 (Node v0.12.7)
 * Windows 8.1 (Node v0.10.38)
 * Windows Server 2008 R2 (Node v0.10.29)
+
+## Data
+
+The data for the server comes from the GeoLit2 DB provided by [maxmind.com](http://www.maxmind.com).
