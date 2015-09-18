@@ -3,6 +3,10 @@
   "version": "0.0.1",
   "description": "Web Server that provides a simple API for IP address information",
   "main": "index.js",
+  "public": true,
+  "publishConfig": {
+    "registry": "http://registry.npmjs.org/"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
