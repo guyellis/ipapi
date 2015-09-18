@@ -1,6 +1,6 @@
 {
   "name": "ipapi",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Web Server that provides a simple API for IP address information",
   "main": "index.js",
   "public": true,
