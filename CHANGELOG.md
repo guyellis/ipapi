@@ -1,5 +1,10 @@
 # Change Log
 
+# 0.0.4
+
+* Add eslint
+
+
 # 0.0.3
 
 * Lock dependency versions

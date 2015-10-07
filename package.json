@@ -1,6 +1,6 @@
 {
   "name": "ipapi",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Web Server that provides a simple API for IP address information",
   "main": "index.js",
   "public": true,
@@ -8,7 +8,7 @@
     "registry": "http://registry.npmjs.org/"
   },
   "engines": {
-    "node" : ">=0.10.0 <0.13"
+    "node": ">=0.10.0 <0.13"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -35,5 +35,8 @@
     "mmdb-reader": "0.0.4",
     "request": "2.62.0",
     "validator": "4.0.6"
+  },
+  "devDependencies": {
+    "eslint": "^1.6.0"
   }
 }
