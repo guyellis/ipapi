@@ -27,7 +27,7 @@ app.get('/ip/:v4', function (req, res) {
       error: 'Not a valid v4 IP address: ' + v4
     });
   }
-  console.log('Processing request:', v4);
+  console.log(Date(), '=>', v4);
   res.send(reader.lookup(v4));
 });
 
