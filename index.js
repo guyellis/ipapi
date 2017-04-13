@@ -1,41 +1,43 @@
-var async = require('async');
-var express = require('express');
-var fs = require('fs');
-var MMDBReader = require('mmdb-reader');
-var path = require('path');
-var request = require('request');
-var zlib = require('zlib');
-var validator = require('validator');
+const async = require('async');
+const express = require('express');
+const fs = require('fs');
+const MMDBReader = require('mmdb-reader');
+const path = require('path');
+const request = require('request');
+const zlib = require('zlib');
+const validator = require('validator');
 
-var cityUrl = 'http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.mmdb.gz';
-var dbFile = path.join(__dirname, 'db/GeoLite2-City.mmdb');
-var reader;
+const cityUrl = 'http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.mmdb.gz';
+const dbFile = path.join(__dirname, 'db/GeoLite2-City.mmdb');
+let reader;
 
-var app = express();
+const app = express();
 
-app.get('/ip', function (req, res) {
+/* eslint-disable no-console */
+
+app.get('/ip', (req, res) => {
   console.log('Invalid request:', req.path);
   return res.status(404).send({
-    error: 'Missing IP address. Usage example: /ip/8.8.8.8'
+    error: 'Missing IP address. Usage example: /ip/8.8.8.8',
   });
 });
 
-app.get('/ip/:v4', function (req, res) {
-  var v4 = req.params.v4;
-  if(!validator.isIP(v4, 4)) {
+app.get('/ip/:v4', (req, res) => {
+  const v4 = req.params.v4;
+  if (!validator.isIP(v4, 4)) {
     return res.status(404).send({
-      error: 'Not a valid v4 IP address: ' + v4
+      error: `Not a valid v4 IP address: ${v4}`,
     });
   }
   console.log(Date(), '=>', v4);
-  res.send(reader.lookup(v4));
+  return res.send(reader.lookup(v4));
 });
 
 
 // 1. Create "db" directory if it doesn't exist.
 function createDbDir(callback) {
-  var dir = path.join(__dirname, 'db');
-  if (!fs.existsSync(dir)){
+  const dir = path.join(__dirname, 'db');
+  if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir);
     console.log('Made dir:', dir);
   } else {
@@ -48,29 +50,35 @@ function createDbDir(callback) {
 function downloadDB(callback) {
   if (!fs.existsSync(dbFile)) {
     process.stdout.write('Downloading DB');
-    var dotWriter = setInterval(function(){
+    const dotWriter = setInterval(() => {
       process.stdout.write('.');
     }, 1000);
     request.get({
       url: cityUrl,
-      encoding: null
-    }, function(err, response, body){
+      encoding: null,
+    }, (err, response, body) => {
       clearInterval(dotWriter);
-      if(err) { return callback(err); }
+      if (err) {
+        return callback(err);
+      }
       console.log('\nDownloaded DB');
       console.log('Unzipping DB');
-      zlib.gunzip(body, function(err, dezipped){
-        if(err) { return callback(err); }
-        fs.writeFile(dbFile, dezipped, function(err) {
+      zlib.gunzip(body, (err2, dezipped) => {
+        if (err2) {
+          return callback(err2);
+        }
+        return fs.writeFile(dbFile, dezipped, (err3) => {
           console.log('Unzipped DB');
-          return callback(err);
+          return callback(err3);
         });
       });
+      return undefined; // for lint
     });
   } else {
     console.log('DB exists');
     return callback();
   }
+  return undefined; // for lint
 }
 
 // 3. Create MMDB reader
@@ -83,11 +91,13 @@ function createReader(callback) {
 async.waterfall([
   createDbDir,
   downloadDB,
-  createReader
-], function(err){
-  if(err) {
+  createReader,
+], (err) => {
+  if (err) {
     return console.log(err);
   }
   console.log('Listening on 3000');
-  app.listen(3000);
+  return app.listen(3000);
 });
+
+/* eslint-enable no-console */
