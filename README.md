@@ -1,4 +1,5 @@
 # ipapi
+
 Web Server that provides a simple API for IP address information
 
 ## Usage
@@ -83,9 +84,7 @@ For example, if you're running the server locally then opening `http://localhost
 
 ## Tested On
 
-* Ubuntu 14.04 (Node v0.12.7)
-* Windows 8.1 (Node v0.10.38)
-* Windows Server 2008 R2 (Node v0.10.29)
+* Ubuntu 16.04 (Node v7.6.0)
 
 ## Data
 

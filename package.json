@@ -1,42 +1,42 @@
 {
-  "name": "ipapi",
-  "version": "0.0.4",
+  "author": "Guy Ellis <wildfiction@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/guyellis/ipapi/issues"
+  },
+  "dependencies": {
+    "async": "2.3.0",
+    "express": "4.15.2",
+    "mmdb-reader": "1.1.0",
+    "request": "2.81.0",
+    "validator": "7.0.0"
+  },
   "description": "Web Server that provides a simple API for IP address information",
-  "main": "index.js",
-  "public": true,
-  "publishConfig": {
-    "registry": "http://registry.npmjs.org/"
+  "devDependencies": {
+    "eslint": "3.x"
   },
   "engines": {
-    "node": ">=0.10.0 <0.13"
+    "node": "7.x"
   },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/guyellis/ipapi.git"
-  },
+  "homepage": "https://github.com/guyellis/ipapi",
   "keywords": [
     "ip",
     "address",
     "lookup",
     "api"
   ],
-  "author": "Guy Ellis <wildfiction@gmail.com>",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/guyellis/ipapi/issues"
+  "main": "index.js",
+  "name": "ipapi",
+  "public": true,
+  "publishConfig": {
+    "registry": "http://registry.npmjs.org/"
   },
-  "homepage": "https://github.com/guyellis/ipapi",
-  "dependencies": {
-    "async": "1.4.2",
-    "express": "4.13.3",
-    "mmdb-reader": "0.0.4",
-    "request": "2.62.0",
-    "validator": "4.0.6"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/guyellis/ipapi.git"
   },
-  "devDependencies": {
-    "eslint": "^1.6.0"
-  }
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "1.0.0"
 }
