@@ -96,8 +96,11 @@ async.waterfall([
   if (err) {
     return console.log(err);
   }
-  console.log('Listening on 3000');
-  return app.listen(3000);
+
+  const p = process.env.IPAPI_PORT || '3334';
+  const port = parseInt(p, 10);
+  console.log(`Listening on ${port}`);
+  return app.listen(port);
 });
 
 /* eslint-enable no-console */
