@@ -6,6 +6,7 @@
   "dependencies": {
     "async": "2.3.0",
     "express": "4.15.2",
+    "forever": "0.15.3",
     "mmdb-reader": "1.1.0",
     "request": "2.81.0",
     "validator": "7.0.0"
@@ -41,6 +42,9 @@
   },
   "scripts": {
     "lint": "eslint --ext .js --ext .jsx . --max-warnings 0",
+    "prodstart": "NODE_ENV=production node_modules/.bin/forever start -l ipapi-forever.log -o ipapi-out.log -e ipapi-err.log -a index.js",
+    "prodstop": "node_modules/.bin/forever stop index.js",
+    "prodlist": "node_modules/.bin/forever list",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "version": "1.0.0"
