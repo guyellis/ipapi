@@ -41,8 +41,8 @@
   },
   "scripts": {
     "lint": "eslint --ext .js --ext .jsx . --max-warnings 0",
-    "prodstart": "forever start -l ipapi.log -e ipapi-err.log -a index.js",
-    "prodstop": "forever stop index.js",
+    "prodstart": "/usr/local/bin/forever start -l ipapi.log -e ipapi-err.log -a index.js",
+    "prodstop": "/usr/local/bin/forever stop index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "version": "1.0.0"
