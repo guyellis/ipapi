@@ -1,5 +1,7 @@
 # ipapi
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/guyellis/ipapi.svg)](https://greenkeeper.io/)
+
 Web Server that provides a simple API for IP address information
 
 ## Usage
