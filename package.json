@@ -4,8 +4,8 @@
     "url": "https://github.com/guyellis/ipapi/issues"
   },
   "dependencies": {
-    "async": "2.4.0",
-    "express": "4.15.2",
+    "async": "2.4.1",
+    "express": "4.15.3",
     "mmdb-reader": "1.1.0",
     "request": "2.81.0",
     "validator": "7.0.0"
@@ -13,10 +13,10 @@
   "description": "Web Server that provides a simple API for IP address information",
   "devDependencies": {
     "eslint": "3.19.0",
-    "eslint-config-airbnb": "14.1.0",
-    "eslint-plugin-import": "2.2.0",
-    "eslint-plugin-jsx-a11y": "4.0.0",
-    "eslint-plugin-react": "6.10.3"
+    "eslint-config-airbnb": "15.0.1",
+    "eslint-plugin-import": "2.3.0",
+    "eslint-plugin-jsx-a11y": "5.0.3",
+    "eslint-plugin-react": "7.0.1"
   },
   "engines": {
     "node": "7.x"
