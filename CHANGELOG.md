@@ -1,5 +1,10 @@
 # Change Log
 
+## 1.1.0
+
+* Update Node to 8.x
+* Update dependencies
+
 ## 1.0.0
 
 * Update Node to 7.x

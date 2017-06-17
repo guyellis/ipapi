@@ -19,7 +19,7 @@
     "eslint-plugin-react": "7.1.0"
   },
   "engines": {
-    "node": "7.x"
+    "node": "8.x"
   },
   "homepage": "https://github.com/guyellis/ipapi",
   "keywords": [
@@ -45,5 +45,5 @@
     "prodstop": "/usr/local/bin/forever stop index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "version": "1.0.0"
+  "version": "1.1.0"
 }
