@@ -42,7 +42,7 @@
   "scripts": {
     "lint": "eslint --ext .js --ext .jsx . --max-warnings 0",
     "prodstart": "pm2 start ../site-ops/pm2/ipapi.config.js",
-    "prodstart2": "/usr/local/bin/forever start -l ipapi.log -e ipapi-err.log -a index.js",
+    "prodstart2": "/usr/local/bin/forever start -l ipapi.log -e ipapi-err.log -a index.js --env production",
     "prodstop": "pm2 stop ipapi",
     "prodstop2": "/usr/local/bin/forever stop index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
