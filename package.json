@@ -8,7 +8,7 @@
     "express": "4.16.2",
     "mmdb-reader": "1.1.0",
     "request": "2.83.0",
-    "validator": "9.1.1"
+    "validator": "9.1.2"
   },
   "description": "Web Server that provides a simple API for IP address information",
   "devDependencies": {
