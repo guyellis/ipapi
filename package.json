@@ -13,10 +13,7 @@
   "description": "Web Server that provides a simple API for IP address information",
   "devDependencies": {
     "eslint": "4.13.1",
-    "eslint-config-airbnb": "16.1.0",
-    "eslint-plugin-import": "2.8.0",
-    "eslint-plugin-jsx-a11y": "5.x",
-    "eslint-plugin-react": "7.5.1"
+    "eslint-config-airbnb-base": "12.1.0"
   },
   "engines": {
     "node": "8.x"
