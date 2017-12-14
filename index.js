@@ -23,7 +23,7 @@ app.get('/ip', (req, res) => {
 });
 
 app.get('/ip/:v4', (req, res) => {
-  const v4 = req.params.v4;
+  const { v4 } = req.params;
   if (!validator.isIP(v4, 4)) {
     return res.status(404).send({
       error: `Not a valid v4 IP address: ${v4}`,
