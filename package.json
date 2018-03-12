@@ -7,7 +7,7 @@
     "async": "2.6.0",
     "express": "4.16.2",
     "mmdb-reader": "1.1.0",
-    "request": "2.83.0",
+    "request": "2.85.0",
     "validator": "9.4.1"
   },
   "description": "Web Server that provides a simple API for IP address information",
