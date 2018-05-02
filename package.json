@@ -5,7 +5,7 @@
   },
   "dependencies": {
     "async": "2.6.0",
-    "express": "4.16.2",
+    "express": "4.16.3",
     "mmdb-reader": "1.1.0",
     "request": "2.85.0",
     "validator": "9.4.1"
