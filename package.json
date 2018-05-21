@@ -4,7 +4,7 @@
     "url": "https://github.com/guyellis/ipapi/issues"
   },
   "dependencies": {
-    "async": "2.6.0",
+    "async": "2.6.1",
     "express": "4.16.3",
     "mmdb-reader": "1.1.0",
     "request": "2.86.0",
