@@ -39,7 +39,8 @@
   },
   "scripts": {
     "lint": "eslint --ext .js --ext .jsx . --max-warnings 0",
-    "prodstart": "pm2 start ../site-ops/pm2/ipapi.config.js",
+    "prodrestart": "npm i && pm2 delete ipapi && pm2 start ../site-ops/pm2/ipapi.config.js --env production",
+    "prodstart": "pm2 start ../site-ops/pm2/ipapi.config.js --env production",
     "prodstop": "pm2 stop ipapi",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
