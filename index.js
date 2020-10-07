@@ -4,12 +4,19 @@ const fs = require('fs');
 const MMDBReader = require('mmdb-reader');
 const path = require('path');
 const request = require('request');
-const zlib = require('zlib');
-const validator = require('validator');
 
-const cityUrl = 'http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.mmdb.gz';
+const validator = require('validator');
+const extract = require('extract-zip')
+
+const { MAXMIND_LICENSE_KEY } = process.env;
+
+const cityUrl = `https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City-CSV&license_key=${MAXMIND_LICENSE_KEY}&suffix=zip`;
+const fileLocation = path.join(__dirname, 'db/');
 const dbFile = path.join(__dirname, 'db/GeoLite2-City.mmdb');
+const zipFilePath = path.join(__dirname, 'db/GeoLite2-City.zip');
 let reader;
+
+const { promises: fsp } = fs;
 
 const app = express();
 
@@ -52,26 +59,30 @@ function downloadDB(callback) {
     process.stdout.write('Downloading DB');
     const dotWriter = setInterval(() => {
       process.stdout.write('.');
-    }, 1000);
+    }, 500);
     request.get({
       url: cityUrl,
       encoding: null,
-    }, (err, response, body) => {
-      clearInterval(dotWriter);
+    }, async (err, response, body) => {
       if (err) {
+        clearInterval(dotWriter);
         return callback(err);
       }
-      console.log('\nDownloaded DB');
+      console.log('\nDownloaded CSV zip');
+      await fsp.writeFile(zipFilePath, body);
+      console.log('Save CSV zip to db/');
+      clearInterval(dotWriter);
       console.log('Unzipping DB');
-      zlib.gunzip(body, (err2, dezipped) => {
-        if (err2) {
-          return callback(err2);
-        }
-        return fs.writeFile(dbFile, dezipped, (err3) => {
-          console.log('Unzipped DB');
-          return callback(err3);
-        });
-      });
+      await extract(zipFilePath, { dir: fileLocation });
+      // zlib..unzip(body, (err2, dezipped) => {
+      //   if (err2) {
+      //     return callback(err2);
+      //   }
+      //   return fs.writeFile(dbFile, dezipped, (err3) => {
+      //     console.log('Unzipped DB');
+      //     return callback(err3);
+      //   });
+      // });
       return undefined; // for lint
     });
   } else {
@@ -82,16 +93,16 @@ function downloadDB(callback) {
 }
 
 // 3. Create MMDB reader
-function createReader(callback) {
-  reader = new MMDBReader(dbFile);
-  console.log('DB reader created');
-  callback();
-}
+// function createReader(callback) {
+//   reader = new MMDBReader(dbFile);
+//   console.log('DB reader created');
+//   callback();
+// }
 
 async.waterfall([
   createDbDir,
   downloadDB,
-  createReader,
+  // createReader,
 ], (err) => {
   if (err) {
     return console.log(err);
