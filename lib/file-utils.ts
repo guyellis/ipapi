@@ -1,8 +1,8 @@
-import fs from 'fs'
-import path from 'path'
+import fs from 'fs';
+import path from 'path';
 
-// 1. Create "db" directory if it doesn't exist.
-export const createDbDir = () => {
+// Create "db" directory if it doesn't exist.
+export const createDbDir = (): void => {
   const dir = path.join(__dirname, 'db');
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir);
@@ -10,5 +10,5 @@ export const createDbDir = () => {
   } else {
     console.log('Dir exists:', dir);
   }
-}
+};
 

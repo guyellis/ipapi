@@ -1,8 +1,10 @@
-import express from 'express'
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import * as http from "http";
+import express from 'express';
 
-import validator from 'validator'
-import { createDbDir } from './file-utils'
-import { downloadDB } from './db-fetch-extract'
+import validator from 'validator';
+import { createDbDir } from './file-utils';
+import { downloadDB } from './db-fetch-extract';
 
 let reader;
 const app = express();
@@ -34,7 +36,7 @@ app.get('/ip/:v4', (req, res) => {
 //   callback();
 // }
 
-export const main = async () => {
+export const main = async (): Promise<http.Server> => {
   createDbDir();
   await downloadDB();
 
@@ -42,6 +44,6 @@ export const main = async () => {
   const port = parseInt(p, 10);
   console.log(`Listening on ${port}`);
   return app.listen(port);
-}
+};
 
 /* eslint-enable no-console */

@@ -1,8 +1,8 @@
-import fs from 'fs'
-import path from 'path'
-import fetch from 'node-fetch'
+import fs from 'fs';
+import path from 'path';
+import fetch from 'node-fetch';
 
-import extract from 'extract-zip'
+import extract from 'extract-zip';
 import util from 'util';
 import { pipeline } from 'stream';
 
@@ -14,12 +14,12 @@ const cityUrl = `https://download.maxmind.com/app/geoip_download?edition_id=GeoL
 const fileLocation = path.join(__dirname, 'db/');
 const zipFilePath = path.join(__dirname, 'db/GeoLite2-City.zip');
 
-const unzipDb = async () => {
+const unzipDb = async (): Promise<void> => {
   await extract(zipFilePath, { dir: fileLocation });
-}
+};
 
 // Download DB file if not exist
-export const downloadDB = async () => {
+export const downloadDB = async (): Promise<void> => {
   process.stdout.write('Downloading DB');
   const dotWriter = setInterval(() => {
     process.stdout.write('.');
@@ -29,11 +29,11 @@ export const downloadDB = async () => {
   if (!response.ok) throw new Error(`unexpected response ${response.statusText}`);
   console.log('\nDownloaded CSV zip');
 
-  await streamPipeline(response.body, fs.createWriteStream(zipFilePath))
+  await streamPipeline(response.body, fs.createWriteStream(zipFilePath));
   console.log('Saved CSV zip to db/');
 
   console.log('Unzipping DB');
   await unzipDb();
 
   clearInterval(dotWriter);
-}
+};

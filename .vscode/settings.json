@@ -6,6 +6,7 @@
     "mmdb",
     "prodrestart",
     "prodstart",
-    "prodstop"
+    "prodstop",
+    "unist"
   ]
 }
