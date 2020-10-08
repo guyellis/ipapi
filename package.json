@@ -14,7 +14,8 @@
   "description": "Web Server that provides a simple API for IP address information",
   "devDependencies": {
     "eslint": "7.10.0",
-    "eslint-config-airbnb-base": "14.2.0"
+    "eslint-config-airbnb-base": "14.2.0",
+    "typescript": "4.0.3"
   },
   "engines": {
     "node": ">=14",

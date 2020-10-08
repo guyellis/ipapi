@@ -28,3 +28,5 @@ node_modules
 
 # Where the db lives once it's downloaded
 db/
+
+dist/

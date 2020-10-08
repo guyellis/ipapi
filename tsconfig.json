@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": false,
+    "esModuleInterop": true,
+    "incremental": true,
+    "lib": ["esnext", "dom", "dom.iterable"],
+    "module": "commonjs",
+    "outDir": "./dist",
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "strict": false,
+    "noImplicitAny": false,
+    "target": "ES2018"
+  },
+  "include": [
+    "lib/**/*",
+    "test/**/*",
+    "server.ts"
+  ]
+}
