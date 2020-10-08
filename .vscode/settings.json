@@ -3,6 +3,7 @@
     "MAXMIND",
     "esnext",
     "ipapi",
+    "lokijs",
     "mmdb",
     "prodrestart",
     "prodstart",

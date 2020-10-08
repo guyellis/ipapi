@@ -6,6 +6,7 @@
   "dependencies": {
     "express": "4.17.1",
     "extract-zip": "2.0.1",
+    "lokijs": "1.5.11",
     "node-fetch": "2.6.1",
     "validator": "13.1.17"
   },

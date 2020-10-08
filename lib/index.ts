@@ -4,7 +4,7 @@ import express from 'express';
 
 import validator from 'validator';
 import { createDbDir } from './file-utils';
-import { downloadDB } from './db-fetch-extract';
+import { downloadDB } from './csv-fetch-extract';
 
 let reader;
 const app = express();
