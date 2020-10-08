@@ -1,8 +1,12 @@
 import fs from 'fs'
 import path from 'path'
-import request from 'request'
+import fetch from 'node-fetch'
 
 import extract from 'extract-zip'
+import util from 'util';
+import { pipeline } from 'stream';
+
+const streamPipeline = util.promisify(pipeline);
 
 const { MAXMIND_LICENSE_KEY } = process.env;
 
@@ -11,40 +15,30 @@ const fileLocation = path.join(__dirname, 'db/');
 const dbFile = path.join(__dirname, 'db/GeoLite2-City.mmdb');
 const zipFilePath = path.join(__dirname, 'db/GeoLite2-City.zip');
 
-const { promises: fsp } = fs;
-
 const unzipDb = async () => {
   await extract(zipFilePath, { dir: fileLocation });
 }
 
 // Download DB file if not exist
-export const downloadDB = () => {
-  return new Promise((resolve, reject) => {
-    if (!fs.existsSync(dbFile)) {
-      process.stdout.write('Downloading DB');
-      const dotWriter = setInterval(() => {
-        process.stdout.write('.');
-      }, 500);
-      request.get({
-        url: cityUrl,
-        encoding: null,
-      }, async (err, response, body) => {
-        if (err) {
-          clearInterval(dotWriter);
-          return reject(err);
-        }
-        console.log('\nDownloaded CSV zip');
-        await fsp.writeFile(zipFilePath, body);
-        console.log('Save CSV zip to db/');
-        clearInterval(dotWriter);
-        console.log('Unzipping DB');
-        await unzipDb();
-        return resolve();
-      });
-    } else {
-      console.log('DB exists');
-      return resolve();
-    }
-    return resolve;
-  });
+export const downloadDB = async () => {
+  process.stdout.write('Downloading DB');
+  const dotWriter = setInterval(() => {
+    process.stdout.write('.');
+  }, 500);
+
+  const response = await fetch(cityUrl);
+  if (!response.ok) throw new Error(`unexpected response ${response.statusText}`);
+  console.log('\nDownloaded CSV zip');
+
+  await streamPipeline(response.body, fs.createWriteStream(zipFilePath))
+  console.log('Saved CSV zip to db/');
+
+  // const body = await result.blob();
+
+  // await fsp.writeFile(zipFilePath, body);
+
+  console.log('Unzipping DB');
+  await unzipDb();
+
+  clearInterval(dotWriter);
 }
