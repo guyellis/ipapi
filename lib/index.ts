@@ -30,13 +30,6 @@ app.get('/ip/:v4', (req, res) => {
   return res.send(reader.lookup(v4));
 });
 
-// 3. Create MMDB reader
-// function createReader(callback) {
-//   reader = new MMDBReader(dbFile);
-//   console.log('DB reader created');
-//   callback();
-// }
-
 export const main = async (): Promise<http.Server> => {
   createDbDir();
   await downloadDB();

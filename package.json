@@ -57,6 +57,7 @@
     "prodrestart": "npm i && pm2 delete ipapi && pm2 start ../site-ops/pm2/ipapi.config.js --env production",
     "prodstart": "pm2 start ../site-ops/pm2/ipapi.config.js --env production",
     "prodstop": "pm2 stop ipapi",
+    "start": "tsc && node dist/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "version": "1.2.2"
