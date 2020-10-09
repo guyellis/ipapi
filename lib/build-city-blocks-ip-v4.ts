@@ -4,6 +4,7 @@ import { promises as fsPromises } from 'fs';
 import parse from 'csv-parse/lib/sync';
 import { CastingContext, CastingFunction } from 'csv-parse';
 import { getIpRange } from './ip-utils';
+import { logAction } from './log-utils';
 
 /*
 GeoLite2-City-Blocks-IPv4.csv File looks like this:
@@ -68,14 +69,17 @@ export type CityBlocks = {
 }
 
 export const buildCityBlocksIpv4 = async (fileLocation: string, db: loki): Promise<Collection<CityBlocks>> => {
+  let endAction = logAction('Parse City Blocks');
   const cityBlocksFile = path.join(fileLocation, 'GeoLite2-City-Blocks-IPv4.csv');
   const cityBlocksCsv = await fsPromises.readFile(cityBlocksFile);
   const rawRecords: CityBlocksRaw[] = parse(cityBlocksCsv, {
     cast,
     columns: true,
-    to_line: 10, // TODO: Just get first 10 lines while testing
+    // to_line: 10, // TODO: Just get first 10 lines while testing
   });
+  endAction(`Total Records parsed: ${rawRecords.length.toLocaleString()}`);
 
+  endAction = logAction('Map City Blocks');
   const records: CityBlocks[] = rawRecords.map((rawRecord) => {
     const [ipLow, ipHigh] = getIpRange(rawRecord.network);
     return {
@@ -84,13 +88,17 @@ export const buildCityBlocksIpv4 = async (fileLocation: string, db: loki): Promi
       ipLow,
     };
   });
+  endAction();
 
+  endAction = logAction('Load City Blocks to DB');
   const cityBlocksCollection = db.addCollection<CityBlocks>('city-blocks', {
     disableMeta: true,
     unique: ['ipHigh', 'ipLow'],
   });
 
   cityBlocksCollection.insert(records);
+
+  endAction(`Total Records loaded ${cityBlocksCollection.count().toLocaleString()}`);
 
   return cityBlocksCollection;
 };

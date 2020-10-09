@@ -5,6 +5,7 @@ import fetch from 'node-fetch';
 import extract from 'extract-zip';
 import util from 'util';
 import { pipeline } from 'stream';
+import { logAction } from './log-utils';
 
 const streamPipeline = util.promisify(pipeline);
 
@@ -20,20 +21,26 @@ const unzipDb = async (): Promise<void> => {
 
 // Download DB file if not exist
 export const downloadDB = async (): Promise<void> => {
-  process.stdout.write('Downloading DB');
-  const dotWriter = setInterval(() => {
-    process.stdout.write('.');
-  }, 500);
+  let endAction = logAction('Downloading DB');
+  // process.stdout.write('Downloading DB');
+  // const dotWriter = setInterval(() => {
+  //   process.stdout.write('.');
+  // }, 500);
 
   const response = await fetch(cityUrl);
   if (!response.ok) throw new Error(`unexpected response ${response.statusText}`);
-  console.log('\nDownloaded CSV zip');
+  // console.log('\nDownloaded CSV zip');
+  endAction();
 
+  endAction = logAction('Save CSV zip to db/');
   await streamPipeline(response.body, fs.createWriteStream(zipFilePath));
-  console.log('Saved CSV zip to db/');
+  // console.log('Saved CSV zip to db/');
+  endAction();
 
-  console.log('Unzipping DB');
+  endAction = logAction('Unzip DB');
+  // console.log('Unzipping DB');
   await unzipDb();
+  endAction();
 
-  clearInterval(dotWriter);
+  // clearInterval(dotWriter);
 };

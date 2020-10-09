@@ -16,6 +16,9 @@ const findFileLocation = async (): Promise<string> => {
   return dir[0];
 };
 
+// export const ipFinderSetup = (db: loki) => {
+//   db.collections('city-blocks').;
+// };
 
 export const buildDb = async (): Promise<loki> => {
   const fileLocation = await findFileLocation();

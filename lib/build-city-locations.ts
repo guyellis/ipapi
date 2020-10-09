@@ -3,6 +3,7 @@ import path from 'path';
 import { promises as fsPromises } from 'fs';
 import parse from 'csv-parse/lib/sync';
 import { CastingContext, CastingFunction } from 'csv-parse';
+import { logAction } from './log-utils';
 
 /*
 GeoLite2-City-Locations-en.csv File looks like this:
@@ -71,6 +72,7 @@ const cast: CastingFunction = (value: string, context: CastingContext) => {
 };
 
 export const buildCityLocations = async (fileLocation: string, db: loki): Promise<Collection<CityLocationRaw>> => {
+  let endAction = logAction('Parse City Locations');
   const cityLocationsFile = path.join(fileLocation, 'GeoLite2-City-Locations-en.csv');
   const cityLocationsCsv = await fsPromises.readFile(cityLocationsFile);
   const records: CityLocationRaw[] = parse(cityLocationsCsv, {
@@ -78,13 +80,16 @@ export const buildCityLocations = async (fileLocation: string, db: loki): Promis
     columns: true,
     // to_line: 10, // TODO: Just get first 10 lines while testing
   });
+  endAction(`Total Records parsed: ${records.length.toLocaleString()}`);
 
+  endAction = logAction('Load City Locations to DB');
   const cityLocationsCollection = db.addCollection<CityLocationRaw>('city-locations', {
     disableMeta: true,
     unique: ['geoname_id'],
   });
 
   cityLocationsCollection.insert(records);
+  endAction(`Total Records loaded ${cityLocationsCollection.count().toLocaleString()}`);
 
   return cityLocationsCollection;
 };
