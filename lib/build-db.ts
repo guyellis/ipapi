@@ -16,10 +16,11 @@ const findFileLocation = async (): Promise<string> => {
 };
 
 
-export const buildDb = async (): Promise<void> => {
+export const buildDb = async (): Promise<loki> => {
   const fileLocation = await findFileLocation();
   console.log(fileLocation);
 
   const db = new loki('ip.db');
   await buildCityLocations(fileLocation, db);
+  return db;
 };

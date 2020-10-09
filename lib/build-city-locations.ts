@@ -38,22 +38,22 @@ Asia/Nicosia,
 1
 */
 
-export type CityLocation = {
-  cityName: string;
-  continentCode: string;
-  continentName: string;
-  countryIsoCode: string;
-  countryName: string;
-  geonameId: number;
-  isInEuropeanUnion: boolean;
-  localeCode: string;
-  metroCode: string;
-  subdivision1IsoCode: string;
-  subdivision1Name: string;
-  subdivision2IsoCode: string;
-  subdivision2Name: string;
-  timeZone: string;
-}
+export type CityLocationRaw = {
+  city_name: string;
+  continent_code: string;
+  continent_name: string;
+  country_iso_code: string;
+  country_name: string;
+  geoname_id: number;
+  is_in_european_union: boolean;
+  locale_code: string;
+  metro_code: string;
+  subdivision_1_iso_code: string;
+  subdivision_1_name: string;
+  subdivision_2_iso_code: string;
+  subdivision_2_name: string;
+  time_zone: string;
+};
 
 const cast: CastingFunction = (value: string, context: CastingContext) => {
   const { header } = context;
@@ -66,28 +66,25 @@ const cast: CastingFunction = (value: string, context: CastingContext) => {
     case 'is_in_european_union':
       return value === "1";
     default:
-      // console.log(value, context);
       return value;
   }
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const buildCityLocations = async (fileLocation: string, db: loki): Promise<Collection<any>> => {
+export const buildCityLocations = async (fileLocation: string, db: loki): Promise<Collection<CityLocationRaw>> => {
   const cityLocationsFile = path.join(fileLocation, 'GeoLite2-City-Locations-en.csv');
   const cityLocationsCsv = await fsPromises.readFile(cityLocationsFile);
-  const records = parse(cityLocationsCsv, {
+  const records: CityLocationRaw[] = parse(cityLocationsCsv, {
     cast,
     columns: true,
-    to_line: 10, // TODO: Just get first 10 lines while testing
+    // to_line: 10, // TODO: Just get first 10 lines while testing
   });
-  // console.log(records);
-  // const lines = cityLocationsCsv.toString().split('\n').slice(1); // drop first line
-  const cityLocationsCollection = db.addCollection('city-locations');
-  records.forEach((record) => {
-    cityLocationsCollection.insert(record);
+
+  const cityLocationsCollection = db.addCollection<CityLocationRaw>('city-locations', {
+    disableMeta: true,
+    unique: ['geoname_id'],
   });
+
+  cityLocationsCollection.insert(records);
+
   return cityLocationsCollection;
 };
-
-// const fl = path.join(__dirname, '../dist/lib/db/GeoLite2-City-CSV_20201006');
-// buildCityLocations(fl);
