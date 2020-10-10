@@ -4,6 +4,7 @@ import glob from 'fast-glob';
 import { buildCityLocations, CityLocation } from './build-city-locations';
 import { buildCityBlocksIpv4, CityBlocks } from './build-city-blocks-ip-v4';
 import { ipToNumber } from './ip-utils';
+import { IPInfo, mapToLegacy } from './legacy';
 
 const findFileLocation = async (): Promise<string> => {
   const base = path.join(__dirname, 'db');
@@ -17,43 +18,26 @@ const findFileLocation = async (): Promise<string> => {
   return dir[0];
 };
 
-export type IpFinderFunc = (ip: string) => CityLocation;
-
-const emptyCityLocation: CityLocation = {
-  city_name: '',
-  continent_code: '',
-  continent_name: '',
-  country_iso_code: '',
-  country_name: '',
-  geoname_id: 0,
-  is_in_european_union: false,
-  locale_code: '',
-  metro_code: '',
-  subdivision_1_iso_code: '',
-  subdivision_1_name: '',
-  subdivision_2_iso_code: '',
-  subdivision_2_name: '',
-  time_zone: '',
-};
+export type IpFinderFunc = (ip: string) => IPInfo;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const ipFinderSetup = (
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   cityLocationsCollection: Collection<CityLocation>,
   cityBlocksCollection: Collection<CityBlocks>,
-) => (ipRaw: string): CityLocation => {
+) => (ipRaw: string): IPInfo => {
   const ip = ipToNumber(ipRaw);
   const cityBlocks = cityBlocksCollection.find({
-    ipHigh: { $lte: ip},
-    ipLow: {$gte: ip },
+    ipHigh: { $gte: ip },
+    ipLow: { $lte: ip },
   });
   if (!cityBlocks) {
     console.error(`No cityBocks found.`, cityBlocks, ipRaw);
-    return emptyCityLocation;
+    return mapToLegacy();
   }
   if (cityBlocks.length !== 1) {
     console.error(`Unexpected number of cityBocks of ${cityBlocks.length}. Expecting 1`, cityBlocks, ipRaw);
-    return emptyCityLocation;
+    return mapToLegacy();
   }
   const [cityBlock] = cityBlocks;
 
@@ -62,14 +46,14 @@ export const ipFinderSetup = (
   });
   if (!cityLocations) {
     console.error(`No cityLocations found.`, cityLocations, ipRaw);
-    return emptyCityLocation;
+    return mapToLegacy();
   }
   if (cityLocations.length !== 1) {
     console.error(`Unexpected number of cityLocations of ${cityLocations.length}. Expecting 1`, cityLocations, ipRaw);
-    return emptyCityLocation;
+    return mapToLegacy();
   }
 
-  return emptyCityLocation[0];
+  return mapToLegacy(cityLocations[0]);
 };
 
 export const buildDb = async (): Promise<IpFinderFunc> => {

@@ -27,7 +27,9 @@ app.get('/ip/:v4', (req, res) => {
     });
   }
   console.log(Date(), '=>', v4);
-  return res.send(ipFinder(v4));
+  const cityLocation = ipFinder(v4);
+  // console.log(cityLocation);
+  return res.send(cityLocation);
 });
 
 export const main = async (): Promise<http.Server> => {
