@@ -5,9 +5,9 @@ import express from 'express';
 import validator from 'validator';
 import { createDbDir } from './file-utils';
 import { downloadDB } from './csv-fetch-extract';
-import { buildDb } from "./build-db";
+import { buildDb, IpFinderFunc } from "./build-db";
 
-let reader;
+let ipFinder: IpFinderFunc;
 const app = express();
 
 /* eslint-disable no-console */
@@ -27,13 +27,13 @@ app.get('/ip/:v4', (req, res) => {
     });
   }
   console.log(Date(), '=>', v4);
-  return res.send(reader.lookup(v4));
+  return res.send(ipFinder(v4));
 });
 
 export const main = async (): Promise<http.Server> => {
   createDbDir();
   await downloadDB();
-  await buildDb();
+  ipFinder = await buildDb();
 
   const p = process.env.IPAPI_PORT || '3334';
   const port = parseInt(p, 10);

@@ -39,7 +39,7 @@ Asia/Nicosia,
 1
 */
 
-export type CityLocationRaw = {
+export type CityLocation = {
   city_name: string;
   continent_code: string;
   continent_name: string;
@@ -71,11 +71,11 @@ const cast: CastingFunction = (value: string, context: CastingContext) => {
   }
 };
 
-export const buildCityLocations = async (fileLocation: string, db: loki): Promise<Collection<CityLocationRaw>> => {
+export const buildCityLocations = async (fileLocation: string, db: loki): Promise<Collection<CityLocation>> => {
   let endAction = logAction('Parse City Locations');
   const cityLocationsFile = path.join(fileLocation, 'GeoLite2-City-Locations-en.csv');
   const cityLocationsCsv = await fsPromises.readFile(cityLocationsFile);
-  const records: CityLocationRaw[] = parse(cityLocationsCsv, {
+  const records: CityLocation[] = parse(cityLocationsCsv, {
     cast,
     columns: true,
     // to_line: 10, // TODO: Just get first 10 lines while testing
@@ -83,7 +83,7 @@ export const buildCityLocations = async (fileLocation: string, db: loki): Promis
   endAction(`Total Records parsed: ${records.length.toLocaleString()}`);
 
   endAction = logAction('Load City Locations to DB');
-  const cityLocationsCollection = db.addCollection<CityLocationRaw>('city-locations', {
+  const cityLocationsCollection = db.addCollection<CityLocation>('city-locations', {
     disableMeta: true,
     unique: ['geoname_id'],
   });
