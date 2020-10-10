@@ -9,7 +9,7 @@ const octetsToNumbers = (octets: string[]): number[] => {
   });
 };
 
-const ipToNumber = (ip: string): number => {
+export const ipToNumber = (ip: string): number => {
   const parts = ip.split('.');
   if (parts.length !== 4) {
     throw new Error(`Expecting . to split string into 4 parts but got ${parts.length} for ${ip}`);
