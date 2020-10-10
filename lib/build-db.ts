@@ -1,10 +1,12 @@
 import loki from 'lokijs';
 import path from 'path';
 import glob from 'fast-glob';
-import { buildCityLocations, CityLocation } from './build-city-locations';
-import { buildCityBlocksIpv4, CityBlock } from './build-city-blocks-ip-v4';
+import { buildCityLocations } from './build-city-locations';
+import { buildCityBlocksIpv4 } from './build-city-blocks-ip-v4';
 import { ipToNumber } from './ip-utils';
 import { IPInfo, mapToLegacy } from './legacy';
+import { CityBlock } from './db/mongo/city-blocks-ip-v4';
+import { CityLocation } from './db/mongo/city-locations';
 
 const findFileLocation = async (): Promise<string> => {
   const base = path.join(__dirname, 'db');
@@ -37,7 +39,7 @@ export const getRecords = (
     ipLow: { $lte: ip },
   });
   if (!cityBlocks) {
-    console.error(`No cityBocks found.`, cityBlocks, ipRaw);
+    console.error('No cityBocks found.', cityBlocks, ipRaw);
     return [null, null];
   }
   if (cityBlocks.length !== 1) {
@@ -50,7 +52,7 @@ export const getRecords = (
     geoname_id: { $eq: cityBlock.geonameId }
   });
   if (!cityLocations) {
-    console.error(`No cityLocations found.`, cityLocations, ipRaw);
+    console.error('No cityLocations found.', cityLocations, ipRaw);
     return [cityBlock, null];
   }
   if (cityLocations.length !== 1) {

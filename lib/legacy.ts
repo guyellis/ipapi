@@ -1,7 +1,7 @@
 // Prior to 2020-10 the .mmdb file was used with the reader and it mapped
 // a structure that is duplicated here.
 
-import { CityLocation } from "./build-city-locations";
+import { CityLocation } from './db/mongo/city-locations';
 
 type Names =
 {

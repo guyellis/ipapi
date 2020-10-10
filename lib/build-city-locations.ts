@@ -4,6 +4,7 @@ import { promises as fsPromises } from 'fs';
 import parse from 'csv-parse/lib/sync';
 import { CastingContext, CastingFunction } from 'csv-parse';
 import { logAction } from './log-utils';
+import { CityLocation } from './db/mongo/city-locations';
 
 /*
 GeoLite2-City-Locations-en.csv File looks like this:
@@ -39,23 +40,6 @@ Asia/Nicosia,
 1
 */
 
-export type CityLocation = {
-  city_name: string;
-  continent_code: string;
-  continent_name: string;
-  country_iso_code: string;
-  country_name: string;
-  geoname_id: number;
-  is_in_european_union: boolean;
-  locale_code: string;
-  metro_code: string;
-  subdivision_1_iso_code: string;
-  subdivision_1_name: string;
-  subdivision_2_iso_code: string;
-  subdivision_2_name: string;
-  time_zone: string;
-};
-
 const cast: CastingFunction = (value: string, context: CastingContext) => {
   const { header } = context;
   if (header) {
@@ -65,7 +49,7 @@ const cast: CastingFunction = (value: string, context: CastingContext) => {
     case 'geoname_id':
       return parseInt(value);
     case 'is_in_european_union':
-      return value === "1";
+      return value === '1';
     default:
       return value;
   }

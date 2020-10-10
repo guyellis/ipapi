@@ -1,11 +1,11 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import * as http from "http";
+import * as http from 'http';
 import express from 'express';
 
 import validator from 'validator';
 import { createDbDir } from './file-utils';
 import { downloadDB } from './csv-fetch-extract';
-import { buildDb, IpFinder, IpFinderLegacy } from "./build-db";
+import { buildDb, IpFinder, IpFinderLegacy } from './build-db';
 
 let ipFinder: IpFinder;
 let ipFinderLegacy: IpFinderLegacy;

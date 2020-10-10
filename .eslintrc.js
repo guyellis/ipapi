@@ -47,6 +47,7 @@ module.exports = {
     'no-param-reassign': [2, {
       ignorePropertyModificationsFor: ['draft'],
     }],
+    quotes: [2, 'single'],
     'security/detect-object-injection': [0],
     'semi': [2],
     'sort-keys-fix/sort-keys-fix': [2],

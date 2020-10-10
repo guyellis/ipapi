@@ -5,6 +5,7 @@ import parse from 'csv-parse/lib/sync';
 import { CastingContext, CastingFunction } from 'csv-parse';
 import { getIpRange } from './ip-utils';
 import { logAction } from './log-utils';
+import { CityBlock, CityBlockRaw } from './db/mongo/city-blocks-ip-v4';
 
 /*
 GeoLite2-City-Blocks-IPv4.csv File looks like this:
@@ -36,19 +37,6 @@ accuracy_radius
 
 */
 
-export type CityBlocksRaw = {
-  network: string; // 1.0.0.0/24,
-  geoname_id: number; // 2077456,
-  registered_country_geoname_id: number; // 2077456,
-  represented_country_geoname_id?: number; // ,
-  is_anonymous_proxy: boolean; // 0,
-  is_satellite_provider: boolean; // 0,
-  postal_code?: string; // ,
-  latitude: number; // -33.4940,
-  longitude: number; // 143.2104,
-  accuracy_radius: number; // 1000
-};
-
 const cast: CastingFunction = (value: string, context: CastingContext) => {
   const { header } = context;
   if (header) {
@@ -62,17 +50,11 @@ const cast: CastingFunction = (value: string, context: CastingContext) => {
   }
 };
 
-export type CityBlock = {
-  geonameId: number;
-  ipHigh: number;
-  ipLow: number;
-}
-
 export const buildCityBlocksIpv4 = async (fileLocation: string, db: loki): Promise<Collection<CityBlock>> => {
   let endAction = logAction('Parse City Blocks');
   const cityBlocksFile = path.join(fileLocation, 'GeoLite2-City-Blocks-IPv4.csv');
   const cityBlocksCsv = await fsPromises.readFile(cityBlocksFile);
-  const rawRecords: CityBlocksRaw[] = parse(cityBlocksCsv, {
+  const rawRecords: CityBlockRaw[] = parse(cityBlocksCsv, {
     cast,
     columns: true,
     // to_line: 10, // TODO: Just get first 10 lines while testing
