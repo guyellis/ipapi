@@ -2,7 +2,7 @@ import loki from 'lokijs';
 import path from 'path';
 import glob from 'fast-glob';
 import { buildCityLocations, CityLocation } from './build-city-locations';
-import { buildCityBlocksIpv4, CityBlocks } from './build-city-blocks-ip-v4';
+import { buildCityBlocksIpv4, CityBlock } from './build-city-blocks-ip-v4';
 import { ipToNumber } from './ip-utils';
 import { IPInfo, mapToLegacy } from './legacy';
 
@@ -19,17 +19,17 @@ const findFileLocation = async (): Promise<string> => {
 };
 
 type IpCity = {
-  block: CityBlocks | null;
+  block: CityBlock | null;
   location: CityLocation | null;
 }
 export type IpFinderLegacy = (ip: string) => IPInfo;
 export type IpFinder = (ip: string) => IpCity;
-type GetRecordResult = [CityBlocks | null, CityLocation | null];
+type GetRecordResult = [CityBlock | null, CityLocation | null];
 
 export const getRecords = (
   ipRaw: string,
   cityLocationsCollection: Collection<CityLocation>,
-  cityBlocksCollection: Collection<CityBlocks>,
+  cityBlocksCollection: Collection<CityBlock>,
 ): GetRecordResult => {
   const ip = ipToNumber(ipRaw);
   const cityBlocks = cityBlocksCollection.find({
@@ -64,7 +64,7 @@ export const getRecords = (
 
 export const ipFinderSetupLegacy = (
   cityLocationsCollection: Collection<CityLocation>,
-  cityBlocksCollection: Collection<CityBlocks>,
+  cityBlocksCollection: Collection<CityBlock>,
 ) => (ipRaw: string): IPInfo => {
   const [, cityLocation] = getRecords(ipRaw, cityLocationsCollection, cityBlocksCollection);
   return mapToLegacy(cityLocation);
@@ -72,7 +72,7 @@ export const ipFinderSetupLegacy = (
 
 export const ipFinderSetup = (
   cityLocationsCollection: Collection<CityLocation>,
-  cityBlocksCollection: Collection<CityBlocks>,
+  cityBlocksCollection: Collection<CityBlock>,
 ) => (ipRaw: string): IpCity => {
   const [block, location] = getRecords(ipRaw, cityLocationsCollection, cityBlocksCollection);
   return { block, location };

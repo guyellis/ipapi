@@ -62,13 +62,13 @@ const cast: CastingFunction = (value: string, context: CastingContext) => {
   }
 };
 
-export type CityBlocks = {
+export type CityBlock = {
   geonameId: number;
   ipHigh: number;
   ipLow: number;
 }
 
-export const buildCityBlocksIpv4 = async (fileLocation: string, db: loki): Promise<Collection<CityBlocks>> => {
+export const buildCityBlocksIpv4 = async (fileLocation: string, db: loki): Promise<Collection<CityBlock>> => {
   let endAction = logAction('Parse City Blocks');
   const cityBlocksFile = path.join(fileLocation, 'GeoLite2-City-Blocks-IPv4.csv');
   const cityBlocksCsv = await fsPromises.readFile(cityBlocksFile);
@@ -80,7 +80,7 @@ export const buildCityBlocksIpv4 = async (fileLocation: string, db: loki): Promi
   endAction(`Total Records parsed: ${rawRecords.length.toLocaleString()}`);
 
   endAction = logAction('Map City Blocks');
-  const records: CityBlocks[] = rawRecords.map((rawRecord) => {
+  const records: CityBlock[] = rawRecords.map((rawRecord) => {
     const [ipLow, ipHigh] = getIpRange(rawRecord.network);
     return {
       geonameId: rawRecord.geoname_id,
@@ -91,7 +91,7 @@ export const buildCityBlocksIpv4 = async (fileLocation: string, db: loki): Promi
   endAction();
 
   endAction = logAction('Load City Blocks to DB');
-  const cityBlocksCollection = db.addCollection<CityBlocks>('city-blocks', {
+  const cityBlocksCollection = db.addCollection<CityBlock>('city-blocks', {
     disableMeta: true,
     unique: ['ipHigh', 'ipLow'],
   });
