@@ -18,14 +18,19 @@ const findFileLocation = async (): Promise<string> => {
   return dir[0];
 };
 
-export type IpFinderFunc = (ip: string) => IPInfo;
+type IpCity = {
+  block: CityBlocks | null;
+  location: CityLocation | null;
+}
+export type IpFinderLegacy = (ip: string) => IPInfo;
+export type IpFinder = (ip: string) => IpCity;
+type GetRecordResult = [CityBlocks | null, CityLocation | null];
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const ipFinderSetup = (
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const getRecords = (
+  ipRaw: string,
   cityLocationsCollection: Collection<CityLocation>,
   cityBlocksCollection: Collection<CityBlocks>,
-) => (ipRaw: string): IPInfo => {
+): GetRecordResult => {
   const ip = ipToNumber(ipRaw);
   const cityBlocks = cityBlocksCollection.find({
     ipHigh: { $gte: ip },
@@ -33,11 +38,11 @@ export const ipFinderSetup = (
   });
   if (!cityBlocks) {
     console.error(`No cityBocks found.`, cityBlocks, ipRaw);
-    return mapToLegacy();
+    return [null, null];
   }
   if (cityBlocks.length !== 1) {
     console.error(`Unexpected number of cityBocks of ${cityBlocks.length}. Expecting 1`, cityBlocks, ipRaw);
-    return mapToLegacy();
+    return [null, null];
   }
   const [cityBlock] = cityBlocks;
 
@@ -46,22 +51,42 @@ export const ipFinderSetup = (
   });
   if (!cityLocations) {
     console.error(`No cityLocations found.`, cityLocations, ipRaw);
-    return mapToLegacy();
+    return [cityBlock, null];
   }
   if (cityLocations.length !== 1) {
     console.error(`Unexpected number of cityLocations of ${cityLocations.length}. Expecting 1`, cityLocations, ipRaw);
-    return mapToLegacy();
+    return [cityBlock, null];
   }
+  const [cityLocation] = cityLocations;
 
-  return mapToLegacy(cityLocations[0]);
+  return [cityBlock, cityLocation];
 };
 
-export const buildDb = async (): Promise<IpFinderFunc> => {
+export const ipFinderSetupLegacy = (
+  cityLocationsCollection: Collection<CityLocation>,
+  cityBlocksCollection: Collection<CityBlocks>,
+) => (ipRaw: string): IPInfo => {
+  const [, cityLocation] = getRecords(ipRaw, cityLocationsCollection, cityBlocksCollection);
+  return mapToLegacy(cityLocation);
+};
+
+export const ipFinderSetup = (
+  cityLocationsCollection: Collection<CityLocation>,
+  cityBlocksCollection: Collection<CityBlocks>,
+) => (ipRaw: string): IpCity => {
+  const [block, location] = getRecords(ipRaw, cityLocationsCollection, cityBlocksCollection);
+  return { block, location };
+};
+
+type BuildDbResult = [IpFinderLegacy, IpFinder];
+
+export const buildDb = async (): Promise<BuildDbResult> => {
   const fileLocation = await findFileLocation();
-  // console.log(fileLocation);
 
   const db = new loki('ip.db');
   const cityLocationsCollection = await buildCityLocations(fileLocation, db);
   const cityBlocksCollection = await buildCityBlocksIpv4(fileLocation, db);
-  return ipFinderSetup(cityLocationsCollection, cityBlocksCollection);
+  const ipFinderLegacy = ipFinderSetupLegacy(cityLocationsCollection, cityBlocksCollection);
+  const ipFinder = ipFinderSetup(cityLocationsCollection, cityBlocksCollection);
+  return [ipFinderLegacy, ipFinder];
 };

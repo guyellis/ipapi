@@ -5,9 +5,10 @@ import express from 'express';
 import validator from 'validator';
 import { createDbDir } from './file-utils';
 import { downloadDB } from './csv-fetch-extract';
-import { buildDb, IpFinderFunc } from "./build-db";
+import { buildDb, IpFinder, IpFinderLegacy } from "./build-db";
 
-let ipFinder: IpFinderFunc;
+let ipFinder: IpFinder;
+let ipFinderLegacy: IpFinderLegacy;
 const app = express();
 
 /* eslint-disable no-console */
@@ -19,7 +20,26 @@ app.get('/ip', (req, res) => {
   });
 });
 
+/**
+ * Returns the original structure that the reader module provided.
+ */
 app.get('/ip/:v4', (req, res) => {
+  const { v4 } = req.params;
+  if (!validator.isIP(v4, 4)) {
+    return res.status(404).send({
+      error: `Not a valid v4 IP address: ${v4}`,
+    });
+  }
+  console.log(Date(), '=>', v4);
+  const cityLocation = ipFinderLegacy(v4);
+  // console.log(cityLocation);
+  return res.send(cityLocation);
+});
+
+/**
+ * Returns all the data from both CityLocation and CityBlock
+ */
+app.get('/ip2/:v4', (req, res) => {
   const { v4 } = req.params;
   if (!validator.isIP(v4, 4)) {
     return res.status(404).send({
@@ -35,7 +55,7 @@ app.get('/ip/:v4', (req, res) => {
 export const main = async (): Promise<http.Server> => {
   createDbDir();
   await downloadDB();
-  ipFinder = await buildDb();
+  ([ipFinderLegacy, ipFinder] = await buildDb());
 
   const p = process.env.IPAPI_PORT || '3334';
   const port = parseInt(p, 10);
