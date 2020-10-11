@@ -5,14 +5,7 @@ import { CityLocation } from './db/mongo/city-locations';
 
 type Names =
 {
-    // I didn't need the pt-BR and zh-CN key/values from the
-    // names so I didn't bother looking up how JsonCovert maps
-    // those. 
-  // de: string;
   en: string;
-  // fr: string;
-  // ja: string;
-  // ru: string;
 }
 
 type City =
@@ -20,18 +13,21 @@ type City =
   geoname_id: number;
   names: Names;
 }
+
 type Continent =
 {
   code: string;
   geoname_id: number;
   names: Names;
 }
+
 type Country =
 {
   geoname_id: number;
   iso_code: string;
   names: Names;
 }
+
 type Location =
 {
   latitude: number;
@@ -39,6 +35,7 @@ type Location =
   metro_code: number;
   time_zone: string;
 }
+
 type Postal =
 {
   code: string;

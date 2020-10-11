@@ -1,10 +1,9 @@
-import loki from 'lokijs';
 import path from 'path';
 import { promises as fsPromises } from 'fs';
 import parse from 'csv-parse/lib/sync';
 import { CastingContext, CastingFunction } from 'csv-parse';
 import { logAction } from './log-utils';
-import { CityLocation } from './db/mongo/city-locations';
+import { CityLocation, insertCityLocations } from './db/mongo/city-locations';
 
 /*
 GeoLite2-City-Locations-en.csv File looks like this:
@@ -55,7 +54,7 @@ const cast: CastingFunction = (value: string, context: CastingContext) => {
   }
 };
 
-export const buildCityLocations = async (fileLocation: string, db: loki): Promise<Collection<CityLocation>> => {
+export const buildCityLocations = async (fileLocation: string): Promise<void> => {
   let endAction = logAction('Parse City Locations');
   const cityLocationsFile = path.join(fileLocation, 'GeoLite2-City-Locations-en.csv');
   const cityLocationsCsv = await fsPromises.readFile(cityLocationsFile);
@@ -66,14 +65,7 @@ export const buildCityLocations = async (fileLocation: string, db: loki): Promis
   });
   endAction(`Total Records parsed: ${records.length.toLocaleString()}`);
 
-  endAction = logAction('Load City Locations to DB');
-  const cityLocationsCollection = db.addCollection<CityLocation>('city-locations', {
-    disableMeta: true,
-    unique: ['geoname_id'],
-  });
-
-  cityLocationsCollection.insert(records);
-  endAction(`Total Records loaded ${cityLocationsCollection.count().toLocaleString()}`);
-
-  return cityLocationsCollection;
+  endAction = logAction('Load City Locations to Mongo DB');
+  const count = insertCityLocations(records);
+  endAction(`Total Records loaded ${count.toLocaleString()}`);
 };
