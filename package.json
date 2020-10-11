@@ -47,7 +47,7 @@
     "api"
   ],
   "license": "MIT",
-  "main": "index.js",
+  "main": "dist/server.js",
   "name": "ipapi",
   "public": true,
   "publishConfig": {
@@ -60,8 +60,8 @@
   "scripts": {
     "lint": "eslint --ext .ts . --max-warnings 0",
     "lintfix": "npm run lint -- --fix",
-    "prodrestart": "npm i && pm2 delete ipapi && pm2 start ../site-ops/pm2/ipapi.config.js --env production",
-    "prodstart": "pm2 start ../site-ops/pm2/ipapi.config.js --env production",
+    "prodrestart": "npm i && tsc && pm2 delete ipapi && pm2 start ../site-ops/pm2/ipapi.config.js --env production",
+    "prodstart": "npm i && tsc && pm2 start ../site-ops/pm2/ipapi.config.js --env production",
     "prodstop": "pm2 stop ipapi",
     "setup-db": "ts-node lib/setup-db.ts",
     "start": "tsc && node dist/server.js",
