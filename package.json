@@ -63,6 +63,7 @@
     "prodrestart": "npm i && pm2 delete ipapi && pm2 start ../site-ops/pm2/ipapi.config.js --env production",
     "prodstart": "pm2 start ../site-ops/pm2/ipapi.config.js --env production",
     "prodstop": "pm2 stop ipapi",
+    "setup-db": "ts-node lib/setup-db.ts",
     "start": "tsc && node dist/server.js",
     "test": "tsc && npm run lint"
   },

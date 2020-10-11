@@ -27,3 +27,6 @@ build/Release
 node_modules
 
 dist/
+
+# Folder for downloading and unpacking CSV files.
+db-csv-dl

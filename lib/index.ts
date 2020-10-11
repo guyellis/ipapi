@@ -1,10 +1,8 @@
 import * as http from 'http';
 import express from 'express';
-
 import validator from 'validator';
-import { createDbDir } from './file-utils';
-import { downloadDB } from './csv-fetch-extract';
-import { buildDb, ipFinder, ipFinderLegacy } from './build-db';
+
+import { ipFinder, ipFinderLegacy } from './build-db';
 
 const app = express();
 
@@ -27,7 +25,6 @@ app.get('/ip/:v4', async (req, res) => {
   }
   console.log(Date(), '=>', v4);
   const cityLocation = await ipFinderLegacy(v4);
-  // console.log(cityLocation);
   return res.send(cityLocation);
 });
 
@@ -43,15 +40,10 @@ app.get('/ip2/:v4', async (req, res) => {
   }
   console.log(Date(), '=>', v4);
   const cityLocation = await ipFinder(v4);
-  // console.log(cityLocation);
   return res.send(cityLocation);
 });
 
 export const main = async (): Promise<http.Server> => {
-  createDbDir();
-  await downloadDB();
-  await buildDb();
-
   const p = process.env.IPAPI_PORT || '3334';
   const port = parseInt(p, 10);
   console.log(`Listening on ${port}`);

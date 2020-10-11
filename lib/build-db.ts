@@ -1,5 +1,3 @@
-import path from 'path';
-import glob from 'fast-glob';
 import { buildCityLocations } from './build-city-locations';
 import { buildCityBlocksIpv4 } from './build-city-blocks-ip-v4';
 import { ipToNumber } from './ip-utils';
@@ -7,18 +5,7 @@ import { IPInfo, mapToLegacy } from './legacy';
 import { CityBlock, findCityBlockByIp } from './db/mongo/city-blocks-ip-v4';
 import { CityLocation, findCityLocationByGeonameId } from './db/mongo/city-locations';
 import { resetDb, setupIndexes } from './db/mongo/db-helper';
-
-const findFileLocation = async (): Promise<string> => {
-  const base = path.join(__dirname, 'db');
-  const dir = await glob(base + '/**/GeoLite2-City-CSV*', {
-    onlyDirectories: true,
-  });
-  if(dir.length === 0) {
-    throw new Error('No directory found match pattern.');
-  }
-  dir.sort().reverse();
-  return dir[0];
-};
+import { findFileLocation } from './file-utils';
 
 type IpCity = {
   block: CityBlock | null;

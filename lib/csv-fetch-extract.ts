@@ -1,19 +1,19 @@
 import fs from 'fs';
-import path from 'path';
 import fetch from 'node-fetch';
 
 import extract from 'extract-zip';
 import util from 'util';
 import { pipeline } from 'stream';
 import { logAction } from './log-utils';
+import { getDownloadFileLocation, getZipFilePath } from './file-utils';
 
 const streamPipeline = util.promisify(pipeline);
 
 const { MAXMIND_LICENSE_KEY } = process.env;
 
 const cityUrl = `https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City-CSV&license_key=${MAXMIND_LICENSE_KEY}&suffix=zip`;
-const fileLocation = path.join(__dirname, 'db/');
-const zipFilePath = path.join(__dirname, 'db/GeoLite2-City.zip');
+const fileLocation = getDownloadFileLocation();
+const zipFilePath = getZipFilePath();
 
 const unzipDb = async (): Promise<void> => {
   await extract(zipFilePath, { dir: fileLocation });
