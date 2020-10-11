@@ -1,4 +1,5 @@
 import { Db, MongoClient } from 'mongodb';
+import { logAction } from '../../log-utils';
 import { createIndexCityBlocks } from './city-blocks-ip-v4';
 import { createIndexCityLocations } from './city-locations';
 
@@ -44,8 +45,9 @@ export const resetDb = async (): Promise<void> => {
   const db = await getDatabase();
   const collections = await db.collections()
   for (const collection of collections) {
+    const endAction = logAction('Drop collection');
     const stats = await collection.stats();
-    console.log(`Dropping collection ${stats.ns} with ${stats.count.toLocaleString()} records.`);
     await collection.drop();
+    endAction(`Dropped ${stats.ns} with ${stats.count.toLocaleString()} records.`);
   }
 }
