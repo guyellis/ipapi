@@ -54,9 +54,18 @@ const cast: CastingFunction = (value: string, context: CastingContext) => {
   if (header) {
     return value;
   }
+
   switch(context.column) {
     case 'geoname_id':
+    case 'registered_country_geoname_id':
+    case 'represented_country_geoname_id':
+    case 'latitude':
+    case 'longitude':
+    case 'accuracy_radius':
       return parseInt(value);
+    case 'is_anonymous_proxy':
+    case 'is_satellite_provider':
+      return value === '1';
     default:
       return value;
   }
