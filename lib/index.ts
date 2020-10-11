@@ -1,4 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import * as http from 'http';
 import express from 'express';
 
@@ -8,8 +7,6 @@ import { downloadDB } from './csv-fetch-extract';
 import { buildDb, ipFinder, ipFinderLegacy } from './build-db';
 
 const app = express();
-
-/* eslint-disable no-console */
 
 app.get('/ip', (req, res) => {
   console.log('Invalid request:', req.path);
@@ -60,5 +57,3 @@ export const main = async (): Promise<http.Server> => {
   console.log(`Listening on ${port}`);
   return app.listen(port);
 };
-
-/* eslint-enable no-console */

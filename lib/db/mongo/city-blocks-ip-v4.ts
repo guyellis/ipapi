@@ -19,7 +19,7 @@ export type CityBlock = {
   geonameId: number;
   ipHigh: number;
   ipLow: number;
-};
+} & CityBlockRaw;
 
 export const createIndexCityBlocks = async () => {
   const db = await getDatabase();

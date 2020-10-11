@@ -6,6 +6,19 @@ import { getIpRange } from './ip-utils';
 import { logAction } from './log-utils';
 import { CityBlock, CityBlockRaw, insertCityBlocks } from './db/mongo/city-blocks-ip-v4';
 
+const columns = [
+  'network',
+  'geoname_id',
+  'registered_country_geoname_id',
+  'represented_country_geoname_id',
+  'is_anonymous_proxy',
+  'is_satellite_provider',
+  'postal_code',
+  'latitude',
+  'longitude',
+  'accuracy_radius',
+];
+
 /*
 GeoLite2-City-Blocks-IPv4.csv File looks like this:
 
@@ -48,30 +61,41 @@ const cast: CastingFunction = (value: string, context: CastingContext) => {
       return value;
   }
 };
+const BATCH_SIZE = 250_000;
 
 export const buildCityBlocksIpv4 = async (fileLocation: string): Promise<void> => {
-  let endAction = logAction('Parse City Blocks');
+  const endAction = logAction('Parse, Map and Load City Blocks');
   const cityBlocksFile = path.join(fileLocation, 'GeoLite2-City-Blocks-IPv4.csv');
   const cityBlocksCsv = await fsPromises.readFile(cityBlocksFile);
-  const rawRecords: CityBlockRaw[] = parse(cityBlocksCsv, {
-    cast,
-    columns: true,
-    // to_line: 10, // TODO: Just get first 10 lines while testing
-  });
-  endAction(`Total Records parsed: ${rawRecords.length.toLocaleString()}`);
+  let fromLine = 2;
+  let toLine = BATCH_SIZE;
+  let rawRecords: CityBlockRaw[] = [];
+  let count = 0;
+  do {
+    rawRecords = parse(cityBlocksCsv, {
+      cast,
+      columns,
+      fromLine,
+      toLine,
+    });
+    console.log(`Block parse fromLine ${fromLine.toLocaleString()} \
+toLine ${toLine.toLocaleString()} count ${count.toLocaleString()} \
+rawRecords.length ${rawRecords.length.toLocaleString()}`);
+    if (rawRecords.length) {
+      const records: CityBlock[] = rawRecords.map((rawRecord) => {
+        const [ipLow, ipHigh] = getIpRange(rawRecord.network);
+        return {
+          ...rawRecord,
+          geonameId: rawRecord.geoname_id,
+          ipHigh,
+          ipLow,
+        };
+      });
 
-  endAction = logAction('Map City Blocks');
-  const records: CityBlock[] = rawRecords.map((rawRecord) => {
-    const [ipLow, ipHigh] = getIpRange(rawRecord.network);
-    return {
-      geonameId: rawRecord.geoname_id,
-      ipHigh,
-      ipLow,
-    };
-  });
-  endAction();
-
-  endAction = logAction('Load City Blocks to Mongo DB');
-  const count = await insertCityBlocks(records);
+      count += await insertCityBlocks(records);
+      fromLine = toLine + 1;
+      toLine += BATCH_SIZE;
+    }
+  } while (rawRecords.length);
   endAction(`Total Records loaded ${count.toLocaleString()}`);
 };
