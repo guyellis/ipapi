@@ -1,5 +1,27 @@
 # Change Log
 
+## 2.0.0
+
+### Breaking
+
+* Download CSV instead of MMDB
+* Require MongoDB for datastore
+* Require Maxmind License Key
+
+### Features
+
+* Add /ip2/ to provide more data
+* Convert to TypeScript
+
+## 1.2.2
+
+* Update dependencies
+
+## 1.2.1
+
+* Update dependencies
+* Node 14.11.0
+
 ## 1.1.0
 
 * Update Node to 8.x
