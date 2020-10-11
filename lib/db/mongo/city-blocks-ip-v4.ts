@@ -16,7 +16,6 @@ export type CityBlockRaw = {
 };
 
 export type CityBlock = {
-  geonameId: number;
   ipHigh: number;
   ipLow: number;
 } & CityBlockRaw;

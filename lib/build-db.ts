@@ -41,7 +41,7 @@ export const getRecords = async (ipRaw: string): Promise<GetRecordResult> => {
   // }
   const cityBlock = cityBlocks;
 
-  const cityLocations = await findCityLocationByGeonameId(cityBlock.geonameId);
+  const cityLocations = await findCityLocationByGeonameId(cityBlock.geoname_id);
   if (!cityLocations) {
     console.error('No cityLocations found.', cityLocations, ipRaw);
     return [cityBlock, null];
