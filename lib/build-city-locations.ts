@@ -39,13 +39,30 @@ Asia/Nicosia,
 1
 */
 
+const columns = [
+  '_id',
+  'locale_code',
+  'continent_code',
+  'continent_name',
+  'country_iso_code',
+  'country_name',
+  'subdivision_1_iso_code',
+  'subdivision_1_name',
+  'subdivision_2_iso_code',
+  'subdivision_2_name',
+  'city_name',
+  'metro_code',
+  'time_zone',
+  'is_in_european_union',
+];
+
 const cast: CastingFunction = (value: string, context: CastingContext) => {
   const { header } = context;
   if (header) {
     return value;
   }
   switch(context.column) {
-    case 'geoname_id':
+    case '_id':
       return parseInt(value);
     case 'is_in_european_union':
       return value === '1';
@@ -60,7 +77,8 @@ export const buildCityLocations = async (fileLocation: string): Promise<void> =>
   const cityLocationsCsv = await fsPromises.readFile(cityLocationsFile);
   const records: CityLocation[] = parse(cityLocationsCsv, {
     cast,
-    columns: true,
+    columns,
+    fromLine: 2,
     // to_line: 10, // TODO: Just get first 10 lines while testing
   });
   endAction(`Total Records parsed: ${records.length.toLocaleString()}`);

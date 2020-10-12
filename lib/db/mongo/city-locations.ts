@@ -3,12 +3,12 @@ import { getDatabase } from "./db-helper";
 const collectionName = 'city-locations';
 
 export type CityLocation = {
+  _id: number; // Was geoname_id
   city_name: string;
   continent_code: string;
   continent_name: string;
   country_iso_code: string;
   country_name: string;
-  geoname_id: number;
   is_in_european_union: boolean;
   locale_code: string;
   metro_code: string;
@@ -19,17 +19,10 @@ export type CityLocation = {
   time_zone: string;
 };
 
-export const createIndexCityLocations = async () => {
-  const db = await getDatabase();
-  await db.collection(collectionName).createIndex({
-    geoname_id: 1,
-  });
-}
-
 export const findCityLocationByGeonameId = async (geonameId: number): Promise<CityLocation> => {
   const db = await getDatabase();
   const result = await db.collection(collectionName).findOne({
-    geoname_id: { $eq: geonameId }
+    _id: geonameId,
   });
   return result;
 }

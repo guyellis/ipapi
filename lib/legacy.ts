@@ -53,12 +53,12 @@ export type IPInfo =
 }
 
 const emptyCityLocation: CityLocation = {
+  _id: 0,
   city_name: '',
   continent_code: '',
   continent_name: '',
   country_iso_code: '',
   country_name: '',
-  geoname_id: 0,
   is_in_european_union: false,
   locale_code: '',
   metro_code: '',
@@ -72,7 +72,7 @@ const emptyCityLocation: CityLocation = {
 export const mapToLegacy = (cityLocation: CityLocation = emptyCityLocation): IPInfo => {
   const ipInfo: IPInfo = {
     city: {
-      geoname_id: cityLocation.geoname_id,
+      geoname_id: cityLocation._id,
       names: {
         en: cityLocation.city_name,
       }
