@@ -37,8 +37,9 @@ export const getDatabase = async (): Promise<Db> => {
 };
 
 export const setupIndexes = async (): Promise<void> => {
-  // await createIndexCityLocations();
+  const endAction = logAction('Setup DB Indexes');
   await createIndexCityBlocks();
+  endAction();
 }
 
 export const resetDb = async (): Promise<void> => {

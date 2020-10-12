@@ -56,7 +56,7 @@ export const buildDb = async (): Promise<void> => {
   const fileLocation = await findFileLocation();
 
   await resetDb();
-  await setupIndexes();
   await buildCityLocations(fileLocation);
   await buildCityBlocksIpv4(fileLocation);
+  await setupIndexes();
 };
