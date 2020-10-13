@@ -18,7 +18,7 @@
     "@types/mongodb": "3.5.27",
     "@types/node-fetch": "2.5.7",
     "@types/validator": "13.1.0",
-    "@typescript-eslint/eslint-plugin": "4.4.0",
+    "@typescript-eslint/eslint-plugin": "4.4.1",
     "@typescript-eslint/parser": "4.4.1",
     "eslint": "7.11.0",
     "eslint-import-resolver-typescript": "2.3.0",
