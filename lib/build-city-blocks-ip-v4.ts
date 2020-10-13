@@ -92,13 +92,13 @@ toLine ${toLine.toLocaleString()} count ${count.toLocaleString()} \
 rawRecords.length ${rawRecords.length.toLocaleString()}`);
     if (rawRecords.length) {
       const records: CityBlock[] = rawRecords.map((rawRecord) => {
-        const [ipLow, ipHigh] = getIpRange(rawRecord.network);
-        return {
+        const [_id, ipHigh] = getIpRange(rawRecord.network);
+        const cityBlock: CityBlock = {
           ...rawRecord,
-          geonameId: rawRecord.geoname_id,
+          _id,
           ipHigh,
-          ipLow,
         };
+        return cityBlock;
       });
 
       count += await insertCityBlocks(records);

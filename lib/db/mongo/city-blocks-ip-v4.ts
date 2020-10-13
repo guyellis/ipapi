@@ -17,14 +17,13 @@ export type CityBlockRaw = {
 
 export type CityBlock = {
   ipHigh: number;
-  ipLow: number;
+  _id: number;
 } & CityBlockRaw;
 
 export const createIndexCityBlocks = async () => {
   const db = await getDatabase();
   await db.collection(collectionName).createIndex({
     ipHigh: 1,
-    ipLow: 1,
   });
 }
 
@@ -32,7 +31,7 @@ export const findCityBlockByIp = async (ip: number): Promise<CityBlock> => {
   const db = await getDatabase();
   const result = await db.collection(collectionName).findOne({
     ipHigh: { $gte: ip },
-    ipLow: { $lte: ip },
+    _id: { $lte: ip },
   });
   return result;
 };
