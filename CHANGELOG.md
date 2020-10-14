@@ -1,5 +1,13 @@
 # Change Log
 
+## 3.0.0
+
+* Change DB schema to use existing MongoDB `_id` for unique fields to make faster and more efficient.
+
+## 2.0.1
+
+* Remove DB creation from startup of server
+
 ## 2.0.0
 
 ### Breaking
