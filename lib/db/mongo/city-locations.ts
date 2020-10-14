@@ -27,7 +27,8 @@ export const findCityLocationByGeonameId = async (geonameId: number): Promise<Ci
   return result;
 }
 
-export const insertCityLocations = async (cityLocations: CityLocation[]): Promise<void> => {
+export const insertCityLocations = async (cityLocations: CityLocation[]): Promise<number> => {
   const db = await getDatabase();
-  db.collection(collectionName).insertMany(cityLocations);
+  const insertWriteOpResult = await db.collection(collectionName).insertMany(cityLocations);
+  return insertWriteOpResult.insertedCount;
 };

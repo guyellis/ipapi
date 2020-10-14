@@ -84,6 +84,6 @@ export const buildCityLocations = async (fileLocation: string): Promise<void> =>
   endAction(`Total Records parsed: ${records.length.toLocaleString()}`);
 
   endAction = logAction('Load City Locations to Mongo DB');
-  const count = insertCityLocations(records);
+  const count = await insertCityLocations(records);
   endAction(`Total Records loaded ${count.toLocaleString()}`);
 };

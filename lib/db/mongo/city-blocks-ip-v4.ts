@@ -38,6 +38,6 @@ export const findCityBlockByIp = async (ip: number): Promise<CityBlock> => {
 
 export const insertCityBlocks = async (cityLocations: CityBlock[]): Promise<number> => {
   const db = await getDatabase();
-  const result = await db.collection(collectionName).insertMany(cityLocations);
-  return result.insertedCount;
+  const insertWriteOpResult = await db.collection(collectionName).insertMany(cityLocations);
+  return insertWriteOpResult.insertedCount;
 };
