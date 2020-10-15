@@ -47,7 +47,7 @@
     "api"
   ],
   "license": "MIT",
-  "main": "dist/server.js",
+  "main": "dist/lib/api",
   "name": "ipapi",
   "public": true,
   "publishConfig": {

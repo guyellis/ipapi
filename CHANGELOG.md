@@ -1,5 +1,9 @@
 # Change Log
 
+## 3.1.0
+
+* Provide an API that allows this module to be used as a dependency in other projects for querying the DB directly.
+
 ## 3.0.0
 
 * Change DB schema to use existing MongoDB `_id` for unique fields to make faster and more efficient.

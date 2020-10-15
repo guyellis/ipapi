@@ -2,6 +2,7 @@
   "compilerOptions": {
     "allowJs": true,
     "checkJs": false,
+    "declaration": true,
     "esModuleInterop": true,
     "incremental": true,
     "lib": ["esnext", "dom", "dom.iterable"],
