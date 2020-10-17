@@ -1,3 +1,4 @@
+import { FindOneOptions, SchemaMember } from "mongodb";
 import { getDatabase } from "./db-helper";
 
 const collectionName = 'city-locations';
@@ -19,24 +20,33 @@ export type CityLocation = {
   time_zone: string;
 };
 
-export const findCityLocationByGeonameId = async (geonameId: number): Promise<CityLocation> => {
-  const db = await getDatabase();
-  const result = await db.collection(collectionName).findOne<CityLocation>({
-    _id: geonameId,
-  });
-  return result;
-}
-
-export const findCityLocationsByGeonameIds = async (geonameId: number[]): Promise<CityLocation[]> => {
-  const db = await getDatabase();
-  const result = await db.collection(collectionName).find<CityLocation>({
-    _id: { $in: geonameId }
-  }).toArray();
-  return result;
-}
+export type CityLocationFields = keyof CityLocation;
 
 export const insertCityLocations = async (cityLocations: CityLocation[]): Promise<number> => {
   const db = await getDatabase();
   const insertWriteOpResult = await db.collection(collectionName).insertMany(cityLocations);
   return insertWriteOpResult.insertedCount;
 };
+
+export const findCityLocationsByGeonameIds = async (
+  geonameId: number[], fields: CityLocationFields[],
+): Promise<CityLocation[]> => {
+  const projection: SchemaMember<CityLocation, number> = fields.reduce((acc, field) => {
+    acc[field] = 1;
+    return acc;
+  }, {});
+  if (!fields.includes('_id')) {
+    // _id is automatically included so needs to be explicitly excluded.
+    projection._id = -1;
+  }
+
+  const options: FindOneOptions<CityLocation> = fields.length ? {
+    projection,
+  } : {};
+
+  const db = await getDatabase();
+  const result = await db.collection(collectionName).find<CityLocation>({
+    _id: { $in: geonameId }
+  }, options).toArray();
+  return result;
+}

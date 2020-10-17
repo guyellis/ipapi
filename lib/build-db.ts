@@ -2,8 +2,8 @@ import { buildCityLocations } from './build-city-locations';
 import { buildCityBlocksIpv4 } from './build-city-blocks-ip-v4';
 import { ipToNumber } from './ip-utils';
 import { IPInfo, mapToLegacy } from './legacy';
-import { CityBlock, findCityBlockByIp } from './db/mongo/city-blocks-ip-v4';
-import { CityLocation, findCityLocationByGeonameId } from './db/mongo/city-locations';
+import { CityBlock, findCityBlocksByIps } from './db/mongo/city-blocks-ip-v4';
+import { CityLocation, findCityLocationsByGeonameIds } from './db/mongo/city-locations';
 import { resetDb, setupIndexes } from './db/mongo/db-helper';
 import { findFileLocation } from './file-utils';
 
@@ -17,27 +17,21 @@ type GetRecordResult = [CityBlock | null, CityLocation | null];
 
 export const getRecords = async (ipRaw: string): Promise<GetRecordResult> => {
   const ip = ipToNumber(ipRaw);
-  const cityBlocks = await findCityBlockByIp(ip);
-  if (!cityBlocks) {
+  const cityBlocks = await findCityBlocksByIps([ip]);
+  if (!cityBlocks || !cityBlocks.length) {
     console.error('No cityBocks found.', cityBlocks, ipRaw);
     return [null, null];
   }
-  // if (cityBlocks.length !== 1) {
-  //   console.error(`Unexpected number of cityBocks of ${cityBlocks.length}. Expecting 1`, cityBlocks, ipRaw);
-  //   return [null, null];
-  // }
-  const cityBlock = cityBlocks;
 
-  const cityLocations = await findCityLocationByGeonameId(cityBlock.geoname_id);
-  if (!cityLocations) {
+  const [cityBlock] = cityBlocks;
+
+  const cityLocations = await findCityLocationsByGeonameIds([cityBlock.geoname_id], []);
+  if (!cityLocations || !cityLocations.length) {
     console.error('No cityLocations found.', cityLocations, ipRaw);
     return [cityBlock, null];
   }
-  // if (cityLocations.length !== 1) {
-  //   console.error(`Unexpected number of cityLocations of ${cityLocations.length}. Expecting 1`, cityLocations, ipRaw);
-  //   return [cityBlock, null];
-  // }
-  const cityLocation = cityLocations;
+
+  const [cityLocation] = cityLocations;
 
   return [cityBlock, cityLocation];
 };

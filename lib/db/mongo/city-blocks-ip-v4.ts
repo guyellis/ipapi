@@ -27,15 +27,6 @@ export const createIndexCityBlocks = async () => {
   });
 }
 
-export const findCityBlockByIp = async (ip: number): Promise<CityBlock> => {
-  const db = await getDatabase();
-  const result = await db.collection(collectionName).findOne({
-    ipHigh: { $gte: ip },
-    _id: { $lte: ip },
-  });
-  return result;
-};
-
 /**
  * Finds all City Blocks that have IP ranges surrounding the inputs
  * @param ips - a collection of numeric IP addresses
