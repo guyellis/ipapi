@@ -36,6 +36,25 @@ export const findCityBlockByIp = async (ip: number): Promise<CityBlock> => {
   return result;
 };
 
+/**
+ * Finds all City Blocks that have IP ranges surrounding the inputs
+ * @param ips - a collection of numeric IP addresses
+ */
+export const findCityBlocksByIps = async (ips: number[]): Promise<CityBlock[]> => {
+  const subQuery = ips.map((ip) => {
+    return {
+      ipHigh: { $gte: ip },
+      _id: { $lte: ip },
+    };
+  });
+  const query = {
+    $or: subQuery,
+  };
+  const db = await getDatabase();
+  const results = await db.collection(collectionName).find<CityBlock>(query).toArray();
+  return results;
+};
+
 export const insertCityBlocks = async (cityLocations: CityBlock[]): Promise<number> => {
   const db = await getDatabase();
   const insertWriteOpResult = await db.collection(collectionName).insertMany(cityLocations);

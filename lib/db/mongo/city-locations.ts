@@ -21,9 +21,17 @@ export type CityLocation = {
 
 export const findCityLocationByGeonameId = async (geonameId: number): Promise<CityLocation> => {
   const db = await getDatabase();
-  const result = await db.collection(collectionName).findOne({
+  const result = await db.collection(collectionName).findOne<CityLocation>({
     _id: geonameId,
   });
+  return result;
+}
+
+export const findCityLocationsByGeonameIds = async (geonameId: number[]): Promise<CityLocation[]> => {
+  const db = await getDatabase();
+  const result = await db.collection(collectionName).find<CityLocation>({
+    _id: { $in: geonameId }
+  }).toArray();
   return result;
 }
 
