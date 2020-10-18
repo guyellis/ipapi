@@ -9,6 +9,10 @@ const octetsToNumbers = (octets: string[]): number[] => {
   });
 };
 
+/**
+ * Convert an IP in dot notation to a number
+ * @param ip - string of the form "1.2.3.4"
+ */
 export const ipToNumber = (ip: string): number => {
   const parts = ip.split('.');
   if (parts.length !== 4) {
@@ -16,6 +20,14 @@ export const ipToNumber = (ip: string): number => {
   }
   const [one, two, three, four] = octetsToNumbers(parts);
   return one << 24 | two << 16 | three << 8 | four;
+};
+
+/**
+ * Converts a number into an octet dot delimited IP address
+ * @param ip - a number representing an IP address
+ */
+export const numberToIp = (ip: number): string => {
+  return (ip>>>24) +'.' + (ip>>16 & 255) +'.' + (ip>>8 & 255) +'.' + (ip & 255);
 };
 
 const getHighIp = (lowIp: number, cidr: string): number => {

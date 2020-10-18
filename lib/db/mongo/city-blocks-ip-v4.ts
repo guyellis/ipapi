@@ -1,4 +1,6 @@
 import { getDatabase } from "./db-helper";
+import pMap from 'p-map';
+import { FindOneOptions } from "mongodb";
 
 const collectionName = 'city-block-ip-v4';
 
@@ -20,6 +22,8 @@ export type CityBlock = {
   _id: number;
 } & CityBlockRaw;
 
+export type CityBlockFields = keyof CityBlock;
+
 export const createIndexCityBlocks = async () => {
   const db = await getDatabase();
   await db.collection(collectionName).createIndex({
@@ -31,18 +35,31 @@ export const createIndexCityBlocks = async () => {
  * Finds all City Blocks that have IP ranges surrounding the inputs
  * @param ips - a collection of numeric IP addresses
  */
-export const findCityBlocksByIps = async (ips: number[]): Promise<CityBlock[]> => {
-  const subQuery = ips.map((ip) => {
-    return {
+export const findCityBlocksByIps = async (
+  ips: number[], fields?: readonly CityBlockFields[],
+): Promise<CityBlock[]> => {
+  const db = await getDatabase();
+
+  const options: FindOneOptions<CityBlock> = {};
+  if(fields && fields.length) {
+    options.projection = fields.reduce((acc, field) => {
+      acc[field] = 1;
+      return acc;
+    }, {});
+    if (!fields.includes('_id')) {
+      // _id is automatically included so needs to be explicitly excluded.
+      options.projection._id = -1;
+    }
+  }
+
+  const mapper = async (ip: number) => {
+    const query = {
       ipHigh: { $gte: ip },
       _id: { $lte: ip },
     };
-  });
-  const query = {
-    $or: subQuery,
-  };
-  const db = await getDatabase();
-  const results = await db.collection(collectionName).find<CityBlock>(query).toArray();
+    return db.collection(collectionName).findOne<CityBlock>(query, options);
+  }
+  const results = await pMap(ips, mapper, { concurrency: 1 });
   return results;
 };
 

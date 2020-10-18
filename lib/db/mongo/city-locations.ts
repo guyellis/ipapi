@@ -29,22 +29,22 @@ export const insertCityLocations = async (cityLocations: CityLocation[]): Promis
 };
 
 export const findCityLocationsByGeonameIds = async (
-  geonameId: number[], fields: CityLocationFields[],
+  geonameId: number[], fields?: readonly CityLocationFields[],
 ): Promise<CityLocation[]> => {
-  const projection: SchemaMember<CityLocation, number> = fields.reduce((acc, field) => {
-    acc[field] = 1;
-    return acc;
-  }, {});
-  if (!fields.includes('_id')) {
-    // _id is automatically included so needs to be explicitly excluded.
-    projection._id = -1;
+  const db = await getDatabase();
+
+  const options: FindOneOptions<CityLocation> = {};
+  if(fields && fields.length) {
+    options.projection = fields.reduce((acc, field) => {
+      acc[field] = 1;
+      return acc;
+    }, {});
+    if (!fields.includes('_id')) {
+      // _id is automatically included so needs to be explicitly excluded.
+      options.projection._id = -1;
+    }
   }
 
-  const options: FindOneOptions<CityLocation> = fields.length ? {
-    projection,
-  } : {};
-
-  const db = await getDatabase();
   const result = await db.collection(collectionName).find<CityLocation>({
     _id: { $in: geonameId }
   }, options).toArray();
