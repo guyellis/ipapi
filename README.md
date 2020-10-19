@@ -6,7 +6,7 @@ Web Server that provides a simple API for IP address information
 
 ### Prerequisites
 
-- You need to have a MongoDB (or MongoDB API compatible) database available.
+- You need to have a MongoDB (or MongoDB API compatible) database available. (Docker is a great option.)
 - You need to [setup a free account with Maxmind](https://dev.maxmind.com/geoip/geoip2/geolite2/) and get a License Key from them.
 - You need to setup these Environment Variables
   - `MAXMIND_LICENSE_KEY` (required) - Set this to the key you got from Maxmind above
@@ -14,15 +14,28 @@ Web Server that provides a simple API for IP address information
   - `IPAPI_DB_PORT` (required) - The database port
   - `IPAPI_PORT` (optional) - The server port. Defaults to 3334.
 
-### Install and run the server
+### Setup the repo
 
-```
+```shell
 git clone git@github.com:guyellis/ipapi.git
 npm install
-npm start
 ```
 
-Note: The server will take around 2 minutes to start. Each time it starts it clears out the existing MongoDB database and downloads the CSV database and unpacks it. It then parses 2 of the files from there and loads them into the database. One of the files is 3m+ rows and it's loaded in batches. Stdout will show the progress.
+### Setup the DB
+
+Backup your existing `ip` DB as this script will clean out the existing data and create new data.
+
+```shell
+npm run setup-db
+```
+
+This will take a few minutes to complete. This clears out the existing MongoDB `ip` database and downloads the CSV database and unpacks it. It then parses 2 of the files from there and loads them into the database. One of the files is 3m+ rows and it's loaded in batches. Stdout will show the progress.
+
+### Start the Server
+
+```shell
+npm start
+```
 
 ### Call the API
 
@@ -133,4 +146,3 @@ For example, if you're running the server locally then opening `http://localhost
 ## Data
 
 The data for the server comes from the GeoLite2 DB provided by [maxmind.com](http://www.maxmind.com).
-
