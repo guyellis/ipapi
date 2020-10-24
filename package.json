@@ -59,6 +59,7 @@
     "url": "https://github.com/guyellis/ipapi.git"
   },
   "scripts": {
+    "build": "tsc",
     "lint": "eslint --ext .ts . --max-warnings 0",
     "lintfix": "npm run lint -- --fix",
     "prepublishOnly": "tsc",

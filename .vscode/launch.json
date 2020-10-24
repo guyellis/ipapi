@@ -5,14 +5,24 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "TS Script (this file)",
-      "type": "node",
-      "request": "launch",
-      "cwd": "${workspaceFolder}",
       "args": ["${relativeFile}"],
-      "sourceMaps": true,
+      "cwd": "${workspaceFolder}",
+      "name": "TS Script (this file)",
+      "request": "launch",
       "runtimeArgs": ["--nolazy", "-r", "ts-node/register"],
-      "runtimeVersion": "14.11.0"
+      "runtimeVersion": "14.11.0",
+      "sourceMaps": true,
+      "type": "node",
+    },
+    {
+      "name": "Run Server",
+      "outFiles": ["${workspaceFolder}/dist/**/*.js"],
+      "preLaunchTask": "tsc: build - tsconfig.json",
+      "program": "${workspaceRoot}/server.ts",
+      "request": "launch",
+      "runtimeVersion": "14.11.0",
+      "sourceMaps": true,
+      "type": "node"
     },
   ]
 }
