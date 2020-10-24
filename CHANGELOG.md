@@ -1,5 +1,10 @@
 # Change Log
 
+## 3.1.1
+
+* Don't crash if city block is not found.
+* Improve typing
+
 ## 3.1.0
 
 * Provide an API that allows this module to be used as a dependency in other projects for querying the DB directly.
