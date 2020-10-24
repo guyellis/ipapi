@@ -30,7 +30,7 @@ export const insertCityLocations = async (cityLocations: CityLocation[]): Promis
 
 export const findCityLocationsByGeonameIds = async (
   geonameId: number[], fields?: readonly CityLocationFields[],
-): Promise<CityLocation[]> => {
+): Promise<(CityLocation | null)[]> => {
   const db = await getDatabase();
 
   const options: FindOneOptions<CityLocation> = {};

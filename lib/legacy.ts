@@ -69,7 +69,8 @@ const emptyCityLocation: CityLocation = {
   time_zone: '',
 };
 
-export const mapToLegacy = (cityLocation: CityLocation = emptyCityLocation): IPInfo => {
+export const mapToLegacy = (cityLoc: CityLocation | null): IPInfo => {
+  const cityLocation = cityLoc || emptyCityLocation;
   const ipInfo: IPInfo = {
     city: {
       geoname_id: cityLocation._id,

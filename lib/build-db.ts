@@ -17,13 +17,17 @@ type GetRecordResult = [CityBlock | null, CityLocation | null];
 
 export const getRecords = async (ipRaw: string): Promise<GetRecordResult> => {
   const ip = ipToNumber(ipRaw);
-  const cityBlocks = await findCityBlocksByIps([ip]);
+  const cityBlocks: (CityBlock | null)[] = await findCityBlocksByIps([ip]);
   if (!cityBlocks || !cityBlocks.length) {
     console.error('No cityBocks found.', cityBlocks, ipRaw);
     return [null, null];
   }
 
   const [cityBlock] = cityBlocks;
+  if (!cityBlock) {
+    console.error('cityBock is falsy.', cityBlocks, ipRaw);
+    return [null, null];
+  }
 
   const cityLocations = await findCityLocationsByGeonameIds([cityBlock.geoname_id], []);
   if (!cityLocations || !cityLocations.length) {

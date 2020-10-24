@@ -37,7 +37,7 @@ export const createIndexCityBlocks = async () => {
  */
 export const findCityBlocksByIps = async (
   ips: number[], fields?: readonly CityBlockFields[],
-): Promise<CityBlock[]> => {
+): Promise<(CityBlock | null)[]> => {
   const db = await getDatabase();
 
   const options: FindOneOptions<CityBlock> = {};
@@ -52,14 +52,14 @@ export const findCityBlocksByIps = async (
     }
   }
 
-  const mapper = async (ip: number) => {
+  const mapper = async (ip: number): Promise<CityBlock | null> => {
     const query = {
       ipHigh: { $gte: ip },
       _id: { $lte: ip },
     };
     return db.collection(collectionName).findOne<CityBlock>(query, options);
   }
-  const results = await pMap(ips, mapper, { concurrency: 1 });
+  const results: (CityBlock | null)[] = await pMap<number, CityBlock | null>(ips, mapper, { concurrency: 1 });
   return results;
 };
 
