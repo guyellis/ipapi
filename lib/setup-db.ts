@@ -1,5 +1,5 @@
 import { createDbDir } from './file-utils';
-import { downloadDB } from './csv-fetch-extract';
+import { downloadDB } from './file-fetch-extract';
 import { buildDb } from './build-db';
 
 /**
