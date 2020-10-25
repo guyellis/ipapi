@@ -49,12 +49,9 @@ const editionIds: [string, Suffix][] = [
   ['GeoLite2-City', 'tar.gz'],
   ['GeoLite2-ASN', 'tar.gz'],
 ];
-// https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&license_key=YOUR_LICENSE_KEY&suffix=tar.gz
 
 export const downloadDB = async (): Promise<void> => {
   const mapper = ([editionId, suffix]: [string, Suffix]): Promise<void> => downloadEdition(editionId, suffix);
 
   await pMap(editionIds, mapper, { concurrency: 1 });
-
-  // await downloadEdition(editionIds[0]);
 };

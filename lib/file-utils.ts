@@ -24,7 +24,7 @@ export const getFileLocation = async (folderPattern: string): Promise<string> =>
     onlyDirectories: true,
   });
   if(dir.length === 0) {
-    throw new Error('No directory found match pattern.');
+    throw new Error(`No directory found from base: ${base}`);
   }
   dir.sort().reverse();
   return dir[0];

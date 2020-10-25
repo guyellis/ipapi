@@ -1,5 +1,12 @@
 # Change Log
 
+## 4.0.0
+
+* Replace MongoDB with MMDB
+* Remove /ip2/ endpoint
+* Add /city/ endpoint
+* Add /asn/ endpoint
+
 ## 3.1.1
 
 * Don't crash if city block is not found.

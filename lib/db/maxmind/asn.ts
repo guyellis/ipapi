@@ -1,7 +1,7 @@
 import { getDatabase } from "./db-helper";
 import { Asn } from "@maxmind/geoip2-node";
 
-export const findCityBlockByIp = async (
+export const findAsnByIp = async (
   ipAddress: string,
 ): Promise<Asn> => {
   const { asnReader } = await getDatabase();
