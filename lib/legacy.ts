@@ -1,14 +1,14 @@
 // Prior to 2020-10 the .mmdb file was used with the reader and it mapped
 // a structure that is duplicated here.
 
-import { CityLocation } from './db/mongo/city-locations';
+import { City, CityRecord, ContinentRecord, CountryRecord, LocationRecord, PostalRecord, RegisteredCountryRecord, SubdivisionsRecord } from '@maxmind/geoip2-node';
 
 type Names =
 {
   en: string;
 }
 
-type City =
+type CityLegacy =
 {
   geoname_id: number;
   names: Names;
@@ -43,7 +43,7 @@ type Postal =
 
 export type IPInfo =
 {
-  city: City;
+  city: CityLegacy;
   continent: Continent;
   country: Country;
   location: Location;
@@ -52,69 +52,58 @@ export type IPInfo =
   subdivisions: Country[];
 }
 
-const emptyCityLocation: CityLocation = {
-  _id: 0,
-  city_name: '',
-  continent_code: '',
-  continent_name: '',
-  country_iso_code: '',
-  country_name: '',
-  is_in_european_union: false,
-  locale_code: '',
-  metro_code: '',
-  subdivision_1_iso_code: '',
-  subdivision_1_name: '',
-  subdivision_2_iso_code: '',
-  subdivision_2_name: '',
-  time_zone: '',
-};
+export const mapToLegacy = (cityLoc: City): IPInfo => {
+  const cityLocation = cityLoc; // || emptyCityLocation;
 
-export const mapToLegacy = (cityLoc: CityLocation | null): IPInfo => {
-  const cityLocation = cityLoc || emptyCityLocation;
+  const subDivisions = (cityLocation.subdivisions || []) as SubdivisionsRecord[];
+  const subdivisions: Country[] = subDivisions.map((subDiv) => {
+    return {
+      geoname_id: 0,
+      iso_code: subDiv.isoCode ?? 'unknown',
+      names: {
+        en: subDiv.names?.en ?? 'unknown'
+      },
+    };
+  });
+
   const ipInfo: IPInfo = {
     city: {
-      geoname_id: cityLocation._id,
+      geoname_id: (cityLocation.city as CityRecord).geonameId ?? 0,
       names: {
-        en: cityLocation.city_name,
+        en: (cityLocation.city as CityRecord).names?.en ?? 'unknown',
       }
     },
     continent: {
-      code: cityLocation.continent_code,
+      code: (cityLocation.continent as ContinentRecord).code ?? 'NA',
       geoname_id: 0, // unused
       names: {
-        en: cityLocation.continent_name,
+        en: (cityLocation.continent as ContinentRecord).names?.en ?? 'unknown',
       },
     },
     country: {
       geoname_id: 0,
-      iso_code: cityLocation.country_iso_code,
+      iso_code: (cityLocation.country as CountryRecord).isoCode ?? 'unknown',
       names: {
-        en: cityLocation.country_name,
+        en: (cityLocation.country as CountryRecord).names?.en ?? 'unknown',
       }
     },
     location: {
       latitude: 0, // unused
       longitude: 0, // unused
       metro_code: 0, // unused
-      time_zone: cityLocation.time_zone,
+      time_zone: (cityLocation.location as LocationRecord).timeZone ?? 'unknown',
     },
     postal: {
-      code: cityLocation.metro_code, // This is wrong but doesn't matter
+      code: (cityLocation.postal as PostalRecord).code ?? 'unknown', // This is wrong but doesn't matter
     },
     registered_country: {
       geoname_id: 0,
-      iso_code: cityLocation.country_iso_code,
+      iso_code: (cityLocation.registeredCountry as RegisteredCountryRecord).isoCode ?? 'unknown',
       names: {
-        en: cityLocation.country_name,
+        en: (cityLocation.registeredCountry as RegisteredCountryRecord).names?.en ?? 'unknown',
       }
     },
-    subdivisions: [{
-      geoname_id: 0,
-      iso_code: cityLocation.subdivision_1_iso_code,
-      names: {
-        en: cityLocation.subdivision_1_name,
-      }
-    }]
+    subdivisions: subdivisions,
   };
   return ipInfo;
 };
