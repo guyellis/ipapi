@@ -2,10 +2,10 @@ import fs from 'fs';
 import path from 'path';
 import glob from 'fast-glob';
 
-const downloadFolder = 'db-csv-dl';
+const downloadFolder = 'db-dl';
 
 export const getDownloadFileLocation = (): string => path.join(__dirname, downloadFolder);
-export const getZipFilePath = (): string => path.join(__dirname, downloadFolder, 'GeoLite2-City.zip');
+export const getZipFilePath = (editionId: string, suffix: string): string => path.join(__dirname, downloadFolder, `${editionId}.${suffix}`);
 
 // Create "db" directory if it doesn't exist.
 export const createDbDir = (): void => {

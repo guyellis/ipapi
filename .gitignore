@@ -28,5 +28,6 @@ node_modules
 
 dist/
 
-# Folder for downloading and unpacking CSV files.
+# Folder for downloading and unpacking CSV/DB files.
 db-csv-dl
+db-dl

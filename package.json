@@ -5,8 +5,8 @@
   },
   "dependencies": {
     "csv-parse": "4.12.0",
+    "decompress": "4.2.1",
     "express": "4.17.1",
-    "extract-zip": "2.0.1",
     "fast-glob": "3.2.4",
     "mongodb": "3.6.2",
     "node-fetch": "2.6.1",
