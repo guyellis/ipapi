@@ -6,6 +6,7 @@
 * Remove /ip2/ endpoint
 * Add /city/ endpoint
 * Add /asn/ endpoint
+* Also allow v6 IP addresses
 
 ## 3.1.1
 
