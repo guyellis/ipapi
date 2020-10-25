@@ -5,6 +5,8 @@ import validator from 'validator';
 import { ipFinderLegacy } from './build-db';
 import { findCityByIp } from './db/maxmind/city';
 import { findAsnByIp } from './db/maxmind/asn';
+import { downloadDB } from './file-fetch-extract';
+import { createDbDir } from './file-utils';
 
 const app = express();
 
@@ -58,6 +60,8 @@ app.get('/asn/:v4', async (req, res) => {
 });
 
 export const main = async (): Promise<http.Server> => {
+  createDbDir();
+  await downloadDB();
   const p = process.env.IPAPI_PORT || '3334';
   const port = parseInt(p, 10);
   console.log(`Listening on ${port}`);
