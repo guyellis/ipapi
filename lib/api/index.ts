@@ -1,7 +1,12 @@
-import { CityBlock, findCityBlocksByIps } from '../db/mongo/city-blocks-ip-v4';
-import { findCityLocationsByGeonameIds } from '../db/mongo/city-locations';
+import { CountryRecord, SubdivisionsRecord } from '@maxmind/geoip2-node';
+import { findCityByIp } from '../db/maxmind/city';
 
-export { ipToNumber, numberToIp } from '../ip-utils';
+import { ipToNumber, numberToIp } from '../ip-utils';
+
+export {
+  ipToNumber,
+  numberToIp,
+};
 
 type IpCountry = {
   ip: number;
@@ -14,24 +19,19 @@ type IpCountry = {
  * @param ips - numeric IP addresses
  */
 export const getCityLocationsByIp = async (ips: number[]): Promise<IpCountry[]> => {
-  const cityBlockFields = ['_id', 'ipHigh', 'geoname_id'] as const;
-  type SomeFields = Pick<CityBlock, typeof cityBlockFields[number]>;
-  const cityBlocks: SomeFields[] = await findCityBlocksByIps(ips, cityBlockFields);
-
-  const cityLocations = await findCityLocationsByGeonameIds(
-    cityBlocks.map(({geoname_id}) => geoname_id),
-    ['country_name', 'subdivision_1_name', '_id'],
-  );
-
-  const ipCountry = ips.map((ip) => {
-    const cityBlock = cityBlocks.find((cb) => cb._id <= ip && cb.ipHigh >= ip);
-    const cityLocation = cityLocations.find((cl) => cl._id === cityBlock.geoname_id);
-    const { country_name, subdivision_1_name } = cityLocation;
-    return {
+  const promises = ips.map(async (ip) => {
+    const ipAddress = numberToIp(ip);
+    const city = await findCityByIp(ipAddress);
+    const country_name = (city.country as CountryRecord).names?.en ?? 'unknown';
+    const subdivisions = (city.subdivisions || []) as SubdivisionsRecord[];
+    const subdivision_1_name = subdivisions.length > 0 ? subdivisions[0].names?.en ?? 'unknown' : 'unknown';
+    const ipCountry: IpCountry = {
       country_name,
       ip,
       subdivision_1_name,
     };
-  }, {} as IpCountry);
-  return ipCountry;
+    return ipCountry;
+  });
+  const ipCountries = await Promise.all(promises);
+  return ipCountries;
 };
