@@ -1,5 +1,5 @@
 import * as http from 'http';
-import express from 'express';
+import express, { Request, Response } from 'express';
 import validator from 'validator';
 
 import { ipFinderLegacy } from './build-db';
@@ -17,46 +17,46 @@ app.get('/ip', (req, res) => {
   });
 });
 
+const validateIp = (req: Request, res: Response): string | null => {
+  const { ipAddress } = req.params;
+  if (!validator.isIP(ipAddress)) {
+    res.status(400).send({
+      error: `Not a valid v4 or v6 IP address: ${ipAddress}`,
+    });
+    return null;
+  }
+  console.log(Date(), '=>', ipAddress);
+  return ipAddress;
+};
+
 /**
  * Returns the original structure that the reader module provided.
  */
-app.get('/ip/:v4', async (req, res) => {
-  const { v4 } = req.params;
-  if (!validator.isIP(v4, 4)) {
-    return res.status(404).send({
-      error: `Not a valid v4 IP address: ${v4}`,
-    });
+app.get('/ip/:ipAddress', async (req, res) => {
+  const ipAddress = validateIp(req, res);
+  if (ipAddress) {
+    const cityLocation = await ipFinderLegacy(ipAddress);
+    return res.send(cityLocation);
   }
-  console.log(Date(), '=>', v4);
-  const cityLocation = await ipFinderLegacy(v4);
-  return res.send(cityLocation);
 });
 
 /**
  * Returns all the City data from the MMDB
  */
-app.get('/city/:v4', async (req, res) => {
-  const { v4 } = req.params;
-  if (!validator.isIP(v4, 4)) {
-    return res.status(404).send({
-      error: `Not a valid v4 IP address: ${v4}`,
-    });
+app.get('/city/:ipAddress', async (req, res) => {
+  const ipAddress = validateIp(req, res);
+  if (ipAddress) {
+    const city = await findCityByIp(ipAddress);
+    return res.send(city);
   }
-  console.log(Date(), '=>', v4);
-  const city = await findCityByIp(v4);
-  return res.send(city);
 });
 
-app.get('/asn/:v4', async (req, res) => {
-  const { v4 } = req.params;
-  if (!validator.isIP(v4, 4)) {
-    return res.status(404).send({
-      error: `Not a valid v4 IP address: ${v4}`,
-    });
+app.get('/asn/:ipAddress', async (req, res) => {
+  const ipAddress = validateIp(req, res);
+  if (ipAddress) {
+    const asn = await findAsnByIp(ipAddress);
+    return res.send(asn);
   }
-  console.log(Date(), '=>', v4);
-  const asn = await findAsnByIp(v4);
-  return res.send(asn);
 });
 
 export const main = async (): Promise<http.Server> => {
