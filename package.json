@@ -9,7 +9,6 @@
     "decompress": "4.2.1",
     "express": "4.17.1",
     "fast-glob": "3.2.4",
-    "mongodb": "3.6.2",
     "node-fetch": "2.6.1",
     "p-map": "4.0.0",
     "validator": "13.1.17"
@@ -17,7 +16,6 @@
   "description": "Web Server that provides a simple API for IP address information",
   "devDependencies": {
     "@types/express": "4.17.8",
-    "@types/mongodb": "3.5.31",
     "@types/node-fetch": "2.5.7",
     "@types/validator": "13.1.0",
     "@typescript-eslint/eslint-plugin": "4.5.0",
@@ -67,7 +65,6 @@
     "prodrestart": "npm i && tsc && pm2 delete ipapi && pm2 start ../site-ops/pm2/ipapi.config.js --env production",
     "prodstart": "npm i && tsc && pm2 start ../site-ops/pm2/ipapi.config.js --env production",
     "prodstop": "pm2 stop ipapi",
-    "setup-db": "ts-node lib/setup-db.ts",
     "start": "tsc && node dist/server.js",
     "test": "tsc && npm run lint"
   },
