@@ -1,7 +1,6 @@
 import { Db, MongoClient } from 'mongodb';
 import { logAction } from '../../log-utils';
 import { createIndexCityBlocks } from './city-blocks-ip-v4';
-// import { createIndexCityLocations } from './city-locations';
 
 let client: MongoClient;
 let db: Db;

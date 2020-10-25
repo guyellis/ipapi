@@ -18,9 +18,9 @@ export const createDbDir = (): void => {
   }
 };
 
-export const findFileLocation = async (): Promise<string> => {
+export const getFileLocation = async (folderPattern: string): Promise<string> => {
   const base = getDownloadFileLocation();
-  const dir = await glob(base + '/**/GeoLite2-City-CSV*', {
+  const dir = await glob(base + `/**/${folderPattern}*`, {
     onlyDirectories: true,
   });
   if(dir.length === 0) {
@@ -28,4 +28,18 @@ export const findFileLocation = async (): Promise<string> => {
   }
   dir.sort().reverse();
   return dir[0];
+};
+
+export const findFileLocation = async (): Promise<string> => {
+  return getFileLocation('GeoLite2-City-CSV_');
+};
+
+export const getAsnDbFilePath = async (): Promise<string> => {
+  const filePath = await getFileLocation('GeoLite2-ASN_');
+  return path.join(filePath, 'GeoLite2-ASN.mmdb');
+};
+
+export const getCityDbFilePath = async (): Promise<string> => {
+  const filePath = await getFileLocation('GeoLite2-City_');
+  return path.join(filePath, 'GeoLite2-City.mmdb');
 };
