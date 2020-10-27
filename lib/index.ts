@@ -2,11 +2,11 @@ import * as http from 'http';
 import express, { Request, Response } from 'express';
 import validator from 'validator';
 
-import { ipFinderLegacy } from './build-db';
 import { findCityByIp } from './db/maxmind/city';
 import { findAsnByIp } from './db/maxmind/asn';
 import { downloadDB } from './file-fetch-extract';
 import { createDbDir } from './file-utils';
+import { mapToLegacy } from './legacy';
 
 const app = express();
 
@@ -35,7 +35,8 @@ const validateIp = (req: Request, res: Response): string | null => {
 app.get('/ip/:ipAddress', async (req, res) => {
   const ipAddress = validateIp(req, res);
   if (ipAddress) {
-    const cityLocation = await ipFinderLegacy(ipAddress);
+    const city = await findCityByIp(ipAddress);
+    const cityLocation = mapToLegacy(city);
     return res.send(cityLocation);
   }
 });

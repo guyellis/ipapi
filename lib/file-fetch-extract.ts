@@ -45,7 +45,6 @@ const downloadEdition = async (editionId: string, suffix: Suffix): Promise<void>
 };
 
 const editionIds: [string, Suffix][] = [
-  // ['GeoLite2-City-CSV', 'zip'],
   ['GeoLite2-City', 'tar.gz'],
   ['GeoLite2-ASN', 'tar.gz'],
 ];
