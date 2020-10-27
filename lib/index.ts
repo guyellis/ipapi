@@ -7,6 +7,7 @@ import { findCityByIp } from './db/maxmind/city';
 import { findAsnByIp } from './db/maxmind/asn';
 import { downloadDB } from './file-fetch-extract';
 import { mapToLegacy } from './legacy';
+import { setDbLocation } from './db/maxmind/db-helper';
 
 const app = express();
 
@@ -63,6 +64,7 @@ app.get('/asn/:ipAddress', async (req, res) => {
 export const main = async (): Promise<http.Server> => {
   const downloadFolder = 'db-dl';
   const downloadFileLocation = path.join(__dirname, downloadFolder);
+  await setDbLocation(downloadFileLocation);
   await downloadDB(downloadFileLocation);
   const p = process.env.IPAPI_PORT || '3334';
   const port = parseInt(p, 10);

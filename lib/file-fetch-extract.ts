@@ -14,7 +14,7 @@ const { MAXMIND_LICENSE_KEY } = process.env;
 type Suffix = 'zip' | 'tar.gz';
 
 const unzipDb = async (downloadFileLocation: string, editionId: string, suffix: Suffix): Promise<void> => {
-  const zipFilePath = getZipFilePath(editionId, suffix);
+  const zipFilePath = getZipFilePath(downloadFileLocation, editionId, suffix);
 
   await decompress(zipFilePath, downloadFileLocation);
 };
@@ -29,7 +29,7 @@ const downloadEdition = async (downloadFileLocation: string, editionId: string, 
   if (!response.ok) throw new Error(`unexpected response ${response.statusText}`);
   endAction();
 
-  const zipFilePath = getZipFilePath(editionId, suffix);
+  const zipFilePath = getZipFilePath(downloadFileLocation, editionId, suffix);
 
   endAction = logAction(`Save ${editionId} zip to ${zipFilePath}`);
   await streamPipeline(response.body, fse.createWriteStream(zipFilePath));
@@ -46,7 +46,7 @@ const editionIds: [string, Suffix][] = [
 ];
 
 export const downloadDB = async (downloadFileLocation: string): Promise<void> => {
-  fse.ensureDir(downloadFileLocation);
+  await fse.ensureDir(downloadFileLocation);
   const mapper = ([editionId, suffix]: [string, Suffix]): Promise<void> => downloadEdition(downloadFileLocation, editionId, suffix);
 
   await pMap(editionIds, mapper, { concurrency: 1 });
