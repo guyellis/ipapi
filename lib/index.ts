@@ -1,11 +1,11 @@
 import * as http from 'http';
 import express, { Request, Response } from 'express';
 import validator from 'validator';
+import path from 'path';
 
 import { findCityByIp } from './db/maxmind/city';
 import { findAsnByIp } from './db/maxmind/asn';
 import { downloadDB } from './file-fetch-extract';
-import { createDbDir } from './file-utils';
 import { mapToLegacy } from './legacy';
 
 const app = express();
@@ -61,8 +61,9 @@ app.get('/asn/:ipAddress', async (req, res) => {
 });
 
 export const main = async (): Promise<http.Server> => {
-  createDbDir();
-  await downloadDB();
+  const downloadFolder = 'db-dl';
+  const downloadFileLocation = path.join(__dirname, downloadFolder);
+  await downloadDB(downloadFileLocation);
   const p = process.env.IPAPI_PORT || '3334';
   const port = parseInt(p, 10);
   console.log(`Listening on ${port}`);

@@ -1,4 +1,4 @@
-import fs from 'fs';
+import fse from 'fs-extra';
 import fetch from 'node-fetch';
 import pMap from 'p-map';
 
@@ -6,26 +6,22 @@ import decompress from 'decompress';
 import util from 'util';
 import { pipeline } from 'stream';
 import { logAction } from './log-utils';
-import { getDownloadFileLocation, getZipFilePath } from './file-utils';
+import { getZipFilePath } from './file-utils';
 
 const streamPipeline = util.promisify(pipeline);
 
 const { MAXMIND_LICENSE_KEY } = process.env;
 type Suffix = 'zip' | 'tar.gz';
 
-const fileLocation = getDownloadFileLocation();
-
-const unzipDb = async (editionId: string, suffix: Suffix): Promise<void> => {
+const unzipDb = async (downloadFileLocation: string, editionId: string, suffix: Suffix): Promise<void> => {
   const zipFilePath = getZipFilePath(editionId, suffix);
 
-  // await decompress(zipFilePath, { dir: fileLocation });
-  await decompress(zipFilePath, fileLocation);
-
+  await decompress(zipFilePath, downloadFileLocation);
 };
 
 const getUrl = (editionId: string, suffix: Suffix): string => `https://download.maxmind.com/app/geoip_download?edition_id=${editionId}&license_key=${MAXMIND_LICENSE_KEY}&suffix=${suffix}`;
 
-const downloadEdition = async (editionId: string, suffix: Suffix): Promise<void> => {
+const downloadEdition = async (downloadFileLocation: string, editionId: string, suffix: Suffix): Promise<void> => {
   let endAction = logAction(`Downloading DB ${editionId} - ${suffix}`);
 
   const cityUrl = getUrl(editionId, suffix);
@@ -36,11 +32,11 @@ const downloadEdition = async (editionId: string, suffix: Suffix): Promise<void>
   const zipFilePath = getZipFilePath(editionId, suffix);
 
   endAction = logAction(`Save ${editionId} zip to ${zipFilePath}`);
-  await streamPipeline(response.body, fs.createWriteStream(zipFilePath));
+  await streamPipeline(response.body, fse.createWriteStream(zipFilePath));
   endAction();
 
   endAction = logAction(`Unzip ${zipFilePath}`);
-  await unzipDb(editionId, suffix);
+  await unzipDb(downloadFileLocation, editionId, suffix);
   endAction();
 };
 
@@ -49,8 +45,9 @@ const editionIds: [string, Suffix][] = [
   ['GeoLite2-ASN', 'tar.gz'],
 ];
 
-export const downloadDB = async (): Promise<void> => {
-  const mapper = ([editionId, suffix]: [string, Suffix]): Promise<void> => downloadEdition(editionId, suffix);
+export const downloadDB = async (downloadFileLocation: string): Promise<void> => {
+  fse.ensureDir(downloadFileLocation);
+  const mapper = ([editionId, suffix]: [string, Suffix]): Promise<void> => downloadEdition(downloadFileLocation, editionId, suffix);
 
   await pMap(editionIds, mapper, { concurrency: 1 });
 };
