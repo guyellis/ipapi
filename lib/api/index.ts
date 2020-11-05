@@ -1,4 +1,3 @@
-import { CountryRecord, SubdivisionsRecord } from '@maxmind/geoip2-node';
 import { findCityByIp } from '../db/maxmind/city';
 
 import { ipToNumber, numberToIp } from '../ip-utils';
@@ -22,8 +21,8 @@ export const getCityLocationsByIp = async (ips: number[]): Promise<IpCountry[]> 
   const promises = ips.map(async (ip) => {
     const ipAddress = numberToIp(ip);
     const city = await findCityByIp(ipAddress);
-    const country_name = (city.country as CountryRecord).names?.en ?? 'unknown';
-    const subdivisions = (city.subdivisions || []) as SubdivisionsRecord[];
+    const country_name = city.country?.names?.en ?? 'unknown';
+    const subdivisions = city.subdivisions || [];
     const subdivision_1_name = subdivisions.length > 0 ? subdivisions[0].names?.en ?? 'unknown' : 'unknown';
     const ipCountry: IpCountry = {
       country_name,
