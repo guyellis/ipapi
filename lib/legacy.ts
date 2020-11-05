@@ -1,7 +1,7 @@
 // Prior to 2020-10 the .mmdb file was used with the reader and it mapped
 // a structure that is duplicated here.
 
-import { City, CityRecord, ContinentRecord, CountryRecord, LocationRecord, PostalRecord, RegisteredCountryRecord, SubdivisionsRecord } from '@maxmind/geoip2-node';
+import { City, SubdivisionsRecord } from '@maxmind/geoip2-node';
 
 type Names =
 {
@@ -52,9 +52,7 @@ export type IPInfo =
   subdivisions: Country[];
 }
 
-export const mapToLegacy = (cityLoc: City): IPInfo => {
-  const cityLocation = cityLoc; // || emptyCityLocation;
-
+export const mapToLegacy = (cityLocation: City): IPInfo => {
   const subDivisions = (cityLocation.subdivisions || []) as SubdivisionsRecord[];
   const subdivisions: Country[] = subDivisions.map((subDiv) => {
     return {
@@ -68,39 +66,39 @@ export const mapToLegacy = (cityLoc: City): IPInfo => {
 
   const ipInfo: IPInfo = {
     city: {
-      geoname_id: (cityLocation.city as CityRecord).geonameId ?? 0,
+      geoname_id: cityLocation.city?.geonameId ?? 0,
       names: {
-        en: (cityLocation.city as CityRecord).names?.en ?? 'unknown',
+        en: cityLocation.city?.names?.en ?? 'unknown',
       }
     },
     continent: {
-      code: (cityLocation.continent as ContinentRecord).code ?? 'NA',
+      code: cityLocation.continent?.code ?? 'NA',
       geoname_id: 0, // unused
       names: {
-        en: (cityLocation.continent as ContinentRecord).names?.en ?? 'unknown',
+        en: cityLocation.continent?.names?.en ?? 'unknown',
       },
     },
     country: {
       geoname_id: 0,
-      iso_code: (cityLocation.country as CountryRecord).isoCode ?? 'unknown',
+      iso_code: cityLocation.country?.isoCode ?? 'unknown',
       names: {
-        en: (cityLocation.country as CountryRecord).names?.en ?? 'unknown',
+        en: cityLocation.country?.names?.en ?? 'unknown',
       }
     },
     location: {
       latitude: 0, // unused
       longitude: 0, // unused
       metro_code: 0, // unused
-      time_zone: (cityLocation.location as LocationRecord).timeZone ?? 'unknown',
+      time_zone: cityLocation.location?.timeZone ?? 'unknown',
     },
     postal: {
-      code: (cityLocation.postal as PostalRecord).code ?? 'unknown', // This is wrong but doesn't matter
+      code: cityLocation.postal?.code ?? 'unknown', // This is wrong but doesn't matter
     },
     registered_country: {
       geoname_id: 0,
-      iso_code: (cityLocation.registeredCountry as RegisteredCountryRecord).isoCode ?? 'unknown',
+      iso_code: cityLocation.registeredCountry?.isoCode ?? 'unknown',
       names: {
-        en: (cityLocation.registeredCountry as RegisteredCountryRecord).names?.en ?? 'unknown',
+        en: cityLocation.registeredCountry?.names?.en ?? 'unknown',
       }
     },
     subdivisions: subdivisions,

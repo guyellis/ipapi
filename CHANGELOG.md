@@ -1,5 +1,9 @@
 # Change Log
 
+## 4.0.1
+
+* Bug fix: Casting with Typescript was hiding undefined.
+
 ## 4.0.0
 
 * Replace MongoDB with MMDB
