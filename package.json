@@ -60,6 +60,7 @@
   },
   "scripts": {
     "build": "tsc",
+    "download-db": "node dist/lib/download-db.js",
     "lint": "eslint --ext .ts . --max-warnings 0",
     "lintfix": "npm run lint -- --fix",
     "prepublishOnly": "tsc",
