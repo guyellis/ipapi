@@ -64,8 +64,8 @@
     "lint": "eslint --ext .ts . --max-warnings 0",
     "lintfix": "npm run lint -- --fix",
     "prepublishOnly": "tsc",
-    "prodrestart": "npm i && tsc && pm2 delete ipapi && pm2 start ../site-ops/pm2/ipapi.config.js --env production",
-    "prodstart": "npm i && tsc && pm2 start ../site-ops/pm2/ipapi.config.js --env production",
+    "prodrestart": "npm ci && tsc && pm2 delete ipapi && pm2 start ../site-ops/pm2/ipapi.config.js --env production",
+    "prodstart": "npm ci && tsc && pm2 start ../site-ops/pm2/ipapi.config.js --env production",
     "prodstop": "pm2 stop ipapi",
     "start": "tsc && node dist/server.js",
     "test": "tsc && npm run lint"
