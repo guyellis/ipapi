@@ -24,7 +24,7 @@
     "eslint": "7.21.0",
     "eslint-import-resolver-typescript": "2.4.0",
     "eslint-plugin-import": "2.22.1",
-    "eslint-plugin-jest": "24.2.0",
+    "eslint-plugin-jest": "24.2.1",
     "eslint-plugin-security": "1.4.0",
     "eslint-plugin-sort-keys-fix": "1.1.1",
     "husky": "5.1.3",
