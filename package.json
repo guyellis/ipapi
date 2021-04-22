@@ -10,7 +10,7 @@
     "fast-glob": "3.2.5",
     "fs-extra": "9.1.0",
     "node-fetch": "2.6.1",
-    "p-map": "4.0.0",
+    "p-map": "5.0.0",
     "validator": "13.5.2"
   },
   "description": "Web Server that provides a simple API for IP address information",
