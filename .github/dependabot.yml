@@ -1,0 +1,21 @@
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "20:00"
+  open-pull-requests-limit: 20
+  ignore:
+  - dependency-name: p-map
+    versions:
+    - 5.0.0
+  - dependency-name: "@types/fs-extra"
+    versions:
+    - 9.0.10
+  - dependency-name: eslint
+    versions:
+    - 7.22.0
+  - dependency-name: "@typescript-eslint/parser"
+    versions:
+    - 4.16.0
