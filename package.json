@@ -7,7 +7,7 @@
     "@maxmind/geoip2-node": "3.0.0",
     "decompress": "4.2.1",
     "express": "4.17.1",
-    "fast-glob": "3.2.6",
+    "fast-glob": "3.2.7",
     "fs-extra": "10.0.0",
     "node-fetch": "2.6.1",
     "p-map": "4.0.0",
