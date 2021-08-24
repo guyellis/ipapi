@@ -20,7 +20,7 @@
     "@types/node-fetch": "2.5.12",
     "@types/validator": "13.6.3",
     "@typescript-eslint/eslint-plugin": "4.29.2",
-    "@typescript-eslint/parser": "4.29.2",
+    "@typescript-eslint/parser": "4.29.3",
     "eslint": "7.32.0",
     "eslint-import-resolver-typescript": "2.4.0",
     "eslint-plugin-import": "2.24.1",
