@@ -19,7 +19,7 @@
     "@types/fs-extra": "9.0.12",
     "@types/node-fetch": "2.5.12",
     "@types/validator": "13.6.3",
-    "@typescript-eslint/eslint-plugin": "4.31.1",
+    "@typescript-eslint/eslint-plugin": "4.31.2",
     "@typescript-eslint/parser": "4.31.1",
     "eslint": "7.32.0",
     "eslint-import-resolver-typescript": "2.5.0",
