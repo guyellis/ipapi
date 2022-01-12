@@ -4,7 +4,7 @@
     "url": "https://github.com/guyellis/ipapi/issues"
   },
   "dependencies": {
-    "@maxmind/geoip2-node": "3.3.0",
+    "@maxmind/geoip2-node": "3.4.0",
     "decompress": "4.2.1",
     "express": "4.17.2",
     "fast-glob": "3.2.10",
