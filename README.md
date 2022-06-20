@@ -89,3 +89,12 @@ For example, if you're running the server locally then opening `http://localhost
 ## Data
 
 The data for the server comes from the GeoLite2 DB provided by [maxmind.com](http://www.maxmind.com).
+
+## Cloud Run
+
+Build steps for `cloud run`
+
+- Remove the `./dist` directory. This will also remove the older Maxmind DBs in the `db-dl/` folder.
+- Build the `./dist` directory.
+- Download the latest Maxmind DBs by running the script.
+- Upload to `cloud run`

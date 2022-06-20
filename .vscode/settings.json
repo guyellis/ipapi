@@ -1,11 +1,14 @@
 {
   "cSpell.words": [
-    "MAXMIND",
     "esnext",
+    "gcloud",
+    "gcloudignore",
     "geoip",
     "geoname",
+    "headvert",
     "ipapi",
     "lokijs",
+    "MAXMIND",
     "mmdb",
     "prodrestart",
     "prodstart",

@@ -64,7 +64,8 @@ app.get('/asn/:ipAddress', async (req, res) => {
 export const main = async (): Promise<http.Server> => {
   const downloadFileLocation = path.join(__dirname, downloadFolder);
   await setDbLocation(downloadFileLocation);
-  const p = process.env.IPAPI_PORT || '3334';
+  // PORT is provided by Cloud Run so needs to be checked first
+  const p = process.env.PORT || process.env.IPAPI_PORT || '3334';
   const port = parseInt(p, 10);
   console.log(`Listening on ${port}`);
   return app.listen(port);
