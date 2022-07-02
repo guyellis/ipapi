@@ -92,9 +92,4 @@ The data for the server comes from the GeoLite2 DB provided by [maxmind.com](htt
 
 ## Cloud Run
 
-Build steps for `cloud run`
-
-- Remove the `./dist` directory. This will also remove the older Maxmind DBs in the `db-dl/` folder.
-- Build the `./dist` directory.
-- Download the latest Maxmind DBs by running the script.
-- Upload to `cloud run`
+Run the `deploy-cloud-run.mjs` script to build and deploy to Cloud Run.
