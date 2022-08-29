@@ -22,7 +22,7 @@
     "@types/validator": "13.7.5",
     "@typescript-eslint/eslint-plugin": "^5.25.0",
     "@typescript-eslint/parser": "^5.25.0",
-    "eslint": "8.22.0",
+    "eslint": "8.23.0",
     "eslint-import-resolver-typescript": "3.5.0",
     "eslint-plugin-import": "2.26.0",
     "eslint-plugin-jest": "26.8.7",
