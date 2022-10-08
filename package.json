@@ -63,5 +63,5 @@
     "start": "tsc && node dist/server.js",
     "test": "tsc && npm run lint"
   },
-  "version": "4.2.13"
+  "version": "4.2.14"
 }
