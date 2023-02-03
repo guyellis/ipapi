@@ -11,7 +11,7 @@
     "fs-extra": "11.1.0",
     "node-fetch": "2.6.7",
     "p-map": "4.0.0",
-    "validator": "13.7.0"
+    "validator": "13.9.0"
   },
   "description": "Web Server that provides a simple API for IP address information",
   "devDependencies": {
