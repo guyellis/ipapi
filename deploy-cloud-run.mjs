@@ -13,7 +13,11 @@ https://cloud.google.com/build/docs/running-builds/start-build-command-line-api
 
 */
 
-await $`rm -rf dist/`;
+try {
+  await $`rm -rf dist/`;
+} catch (e) {
+  console.log(`No dist/ folder to remove ${e.message}`);
+}
 
 await $`npm run build`;
 
@@ -24,8 +28,11 @@ await $`npm run download-db`;
 await $`rm dist/lib/db-dl/GeoLite2-ASN.tar.gz`;
 await $`rm dist/lib/db-dl/GeoLite2-City.tar.gz`;
 
+// Set the project to headvert in case it has been set to something else in the past
+await $`gcloud config set project headvert`;
+
 // Upload
 await $`gcloud builds submit --tag gcr.io/headvert/ipapi`;
 
 // Deploy the Cloud Run instance
-await $`gcloud run deploy ipapi --image gcr.io/headvert/ipapi --max-instances=1`;
+await $`gcloud run deploy ipapi --image gcr.io/headvert/ipapi --max-instances=1 --region=us-central1`;
