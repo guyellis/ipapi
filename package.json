@@ -19,7 +19,7 @@
     "@types/express-serve-static-core": "4.17.38",
     "@types/fs-extra": "11.0.2",
     "@types/node-fetch": "2.6.4",
-    "@types/validator": "13.11.3",
+    "@types/validator": "13.11.5",
     "@typescript-eslint/eslint-plugin": "5.62.0",
     "@typescript-eslint/parser": "5.62.0",
     "eslint": "8.51.0",
