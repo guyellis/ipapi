@@ -6,7 +6,7 @@
   "dependencies": {
     "@maxmind/geoip2-node": "5.0.0",
     "decompress": "4.2.1",
-    "express": "4.19.1",
+    "express": "4.19.2",
     "fast-glob": "3.3.2",
     "fs-extra": "11.2.0",
     "node-fetch": "2.7.0",
