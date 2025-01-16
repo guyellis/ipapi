@@ -8,7 +8,7 @@
     "decompress": "4.2.1",
     "express": "5.0.1",
     "fast-glob": "3.3.3",
-    "fs-extra": "11.2.0",
+    "fs-extra": "11.3.0",
     "node-fetch": "2.7.0",
     "p-map": "4.0.0",
     "validator": "13.12.0"
