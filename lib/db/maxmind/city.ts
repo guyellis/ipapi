@@ -1,6 +1,6 @@
-import { getDatabase } from "./db-helper";
-import { City } from "@maxmind/geoip2-node";
-import { unknownCity } from "./city-unknown";
+import { getDatabase } from './db-helper';
+import { City } from '@maxmind/geoip2-node';
+import { unknownCity } from './city-unknown';
 
 export const findCityByIp = async (
   ipAddress: string,

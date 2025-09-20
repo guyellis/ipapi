@@ -12,10 +12,10 @@ interface DbReaders {
 }
 
 let dbLocation = '';
-export const setDbLocation = async (dbFileLocation: string) => {
+export const setDbLocation = async (dbFileLocation: string): Promise<void> => {
   dbLocation = dbFileLocation;
   await fse.ensureDir(dbFileLocation);
-}
+};
 
 /**
  * Get the DB connection to use for a CRUD operation.
