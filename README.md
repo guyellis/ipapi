@@ -93,3 +93,7 @@ The data for the server comes from the GeoLite2 DB provided by [maxmind.com](htt
 ## Cloud Run
 
 Run the `deploy-cloud-run.mjs` script to build and deploy to Cloud Run.
+
+## Dependencies
+
+Once [this issue](https://github.com/maxmind/GeoIP2-node/issues/1587) is resolved we can make some dependency upgrades.
