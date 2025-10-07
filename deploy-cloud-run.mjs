@@ -29,13 +29,13 @@ if (!MAXMIND_LICENSE_KEY) {
 console.log('*** Pull latest from GitHub');
 await $`git pull`;
 
-console.log('*** Update dependencies');
+console.log('*** `npm ci` - install dependencies');
 await $`npm ci`;
 
-console.log('*** Bump version');
+console.log('*** Bump version with `npm version patch ...`');
 await $`npm version patch -m 'Update dependencies'`;
 
-console.log('*** Push tag to GitHub');
+console.log('*** Push tag to GitHub with `git push`');
 await $`git push`;
 
 try {
