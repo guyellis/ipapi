@@ -10,7 +10,6 @@
       "name": "TS Script (this file)",
       "request": "launch",
       "runtimeArgs": ["--nolazy", "-r", "ts-node/register"],
-      "runtimeVersion": "24.5.0",
       "sourceMaps": true,
       "type": "node",
     },
@@ -20,7 +19,6 @@
       "preLaunchTask": "tsc: build - tsconfig.json",
       "program": "${workspaceRoot}/server.ts",
       "request": "launch",
-      "runtimeVersion": "24.5.0",
       "sourceMaps": true,
       "type": "node"
     },
