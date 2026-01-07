@@ -64,5 +64,5 @@
     "test": "tsc && npm run lint"
   },
   "type": "commonjs",
-  "version": "4.2.34"
+  "version": "4.2.35"
 }
