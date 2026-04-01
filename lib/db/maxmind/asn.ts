@@ -1,11 +1,11 @@
-import { getDatabase } from "./db-helper";
-import { Asn } from "@maxmind/geoip2-node";
+import { getDatabase } from './db-helper';
+import { Asn } from '@maxmind/geoip2-node';
 
 const unknownAsn: Asn = {
   autonomousSystemNumber: 0,
   autonomousSystemOrganization: 'unknown',
   network: 'unknown',
-}
+};
 
 export const findAsnByIp = async (
   ipAddress: string,

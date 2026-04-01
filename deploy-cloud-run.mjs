@@ -7,7 +7,7 @@ to be run except this script.
 
 */
 
-// eslint-disable-next-line import/no-unresolved
+ 
 import 'zx/globals';
 
 /*

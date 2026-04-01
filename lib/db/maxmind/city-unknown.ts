@@ -1,5 +1,5 @@
-import { City } from "@maxmind/geoip2-node";
-import { CityResponse } from "@maxmind/geoip2-node/dist/src/types";
+import { City } from '@maxmind/geoip2-node';
+import { CityResponse } from '@maxmind/geoip2-node/dist/src/types';
 
 const UNKNOWN = 'unknown';
 const names = {
@@ -24,27 +24,27 @@ const continent = {
 };
 
 const country = {
+  confidence,
   geoname_id,
+  isInEuropeanUnion,
   iso_code,
   names,
-  confidence,
-  isInEuropeanUnion,
 };
 const maxmind = {
   queriesRemaining: 1000,
 };
 const registered_country = {
   geoname_id,
+  isInEuropeanUnion,
   iso_code,
   names,
-  isInEuropeanUnion,
 };
 const represented_country = {
   geoname_id,
+  isInEuropeanUnion,
   iso_code,
   names,
   type: UNKNOWN,
-  isInEuropeanUnion,
 };
 const traits = {};
 
